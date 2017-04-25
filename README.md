@@ -66,7 +66,6 @@ All revision entities are using the `AbstractEntity` super class, so they all co
 
 You can basically distinguish the revision option in create/update timestamps, paired with the responsible user and "marked as deleted" flags.
 
-To provide the user ID (currently only type `Long` by the same reasons like the identifier) you have to implement the interface `RevisionUser` where ever you get your current users ID from.
 
 
 | Entity                                    | Creation Date | Creation User | Update Date | Update User | Delete Date | Delete User |
@@ -76,6 +75,26 @@ To provide the user ID (currently only type `Long` by the same reasons like the 
 | `AbstractRevisionEntity`                  |       X       |       X       |      X      |      X      |             |             |
 | `AbstractRevisionDeleteMarkerEntity`      |       X       |       X       |      X      |      X      |      X      |      X      |
 
+To provide the user ID (currently only type `Long` by the same reasons like the identifier) you have to implement the interface `RevisionUser` where ever you get your current users ID from.
+
+For example:
+
+```java
+import io.coodoo.framework.jpa.boundary.RevisionUser;
+
+@Stateless
+public class UserService implements RevisionUser {
+
+    // ...
+
+    @Override
+    public Long getUserId() {
+        return getCurrentUser().getId();
+    }
+
+    // ...
+}
+```
 
 ### Fields
 
