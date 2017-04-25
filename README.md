@@ -15,7 +15,7 @@
 
 ## Background
 
-Every JPA entity needs an ID and most of the times it is an auto increment number. Also in many cases you want to have the basic revision information stored for every entry.
+Every JPA entity needs an identifier and most of the time it is an auto increment number. Also in many cases you want to have the basic revision information stored for every entry.
 Instead of always writing the same stuff you could just take this fields and functionality from abstract super classes. Enough said.
 
 
@@ -64,6 +64,11 @@ Since it is the most used identifier the root identification entity `AbstractEnt
 
 All revision entities are using the `AbstractEntity` super class, so they all come with the `id` field.
 
+You can basically distinguish the revision option in create/update timestamps, paired with the responsible user and "marked as deleted" flags.
+
+To provide the user ID (currently only type `Long` by the same reasons like the identifier) you have to implement the interface `RevisionUser` where ever you get your current users ID from.
+
+
 | Entity                                    | Creation Date | Creation User | Update Date | Update User | Delete Date | Delete User |
 |-------------------------------------------|:-------------:|:-------------:|:-----------:|:-----------:|:-----------:|:-----------:|
 | `AbstractRevisionDatesEntity`             |       X       |               |      X      |             |             |             |
@@ -74,11 +79,11 @@ All revision entities are using the `AbstractEntity` super class, so they all co
 
 ### Fields
 
-| Fields      | ID   | Creation Date | Creation User | Update Date   | Update User | Deletion Date | Deletion User |
-|-------------|------|---------------|---------------|---------------|-------------|---------------|---------------|
-| Name        | id   | createdAt     | createdBy     | updatedAt     | updatedBy   | deletedAt     | deletedBy     |
-| Type        | Long | LocalDateTime | Long          | LocalDateTime | Long        | LocalDateTime | Long          |
-| Column name | id   | created_at    | created_by    | updated_at    | updated_by  | deleted_at    | deleted_by    |
+| Fields      | ID     | Creation Date   | Creation User   | Update Date     | Update User   | Deletion Date   | Deletion User   |
+|-------------|--------|-----------------|-----------------|-----------------|---------------|-----------------|-----------------|
+| Name        | `id`   | `createdAt`     | `createdBy`     | `updatedAt`     | `updatedBy`   | `deletedAt`     | `deletedBy`     |
+| Type        | `Long` | `LocalDateTime` | `Long`          | `LocalDateTime` | `Long`        | `LocalDateTime` | `Long`          |
+| Column      | `id`   | `created_at`    | `created_by`    | `updated_at`    | `updated_by`  | `deleted_at`    | `deleted_by`    |
 
 
 ## Changelog
