@@ -14,7 +14,7 @@ import io.coodoo.framework.jpa.boundary.entity.AbstractRevisionEntity;
 /**
  * Fills the entites revision attributes
  * 
- * <table border="1">
+ * <table border="1" summary="Fields">
  * <tr>
  * <th>Entity</th>
  * <th>Creation Date</th>

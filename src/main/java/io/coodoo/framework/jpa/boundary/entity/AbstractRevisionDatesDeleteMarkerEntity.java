@@ -8,10 +8,10 @@ import javax.persistence.MappedSuperclass;
 /**
  * Base entity providing identification and revision information.
  * 
- * </br>
- * </br>
+ * <br>
+ * <br>
  * 
- * <table border="1">
+ * <table border="1" summary="Fields">
  * <tr>
  * <th>Fields</th>
  * <th>ID</th>
