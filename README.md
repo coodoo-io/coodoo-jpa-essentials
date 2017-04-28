@@ -67,13 +67,12 @@ All revision entities are using the `AbstractEntity` super class, so they all co
 You can basically distinguish the revision option in create/update timestamps, paired with the responsible user and "marked as deleted" flags.
 
 
-
-| Entity                                    | Creation Date | Creation User | Update Date | Update User | Delete Date | Delete User |
-|-------------------------------------------|:-------------:|:-------------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| `AbstractRevisionDatesEntity`             |       X       |               |      X      |             |             |             |
-| `AbstractRevisionDatesDeleteMarkerEntity` |       X       |               |      X      |             |      X      |             |
-| `AbstractRevisionEntity`                  |       X       |       X       |      X      |      X      |             |             |
-| `AbstractRevisionDeleteMarkerEntity`      |       X       |       X       |      X      |      X      |      X      |      X      |
+| Entity                                    | Creation Date | Creation User | Update Date | Update User | Deletion Date | Deletion User |
+|-------------------------------------------|:-------------:|:-------------:|:-----------:|:-----------:|:-------------:|:-------------:|
+| `AbstractRevisionDatesEntity`             |       X       |               |      X      |             |               |               |
+| `AbstractRevisionDatesDeleteMarkerEntity` |       X       |               |      X      |             |      X        |               |
+| `AbstractRevisionEntity`                  |       X       |       X       |      X      |      X      |               |               |
+| `AbstractRevisionDeleteMarkerEntity`      |       X       |       X       |      X      |      X      |      X        |      X        |
 
 To provide the user ID (currently only type `Long` by the same reasons like the identifier) you have to implement the interface `RevisionUser` where ever you get your current users ID from.
 
