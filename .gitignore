@@ -3,3 +3,4 @@ coodoo-jpa-essentials/.settings
 .project
 /target/
 .settings
+rebel.xml
