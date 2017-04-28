@@ -23,5 +23,5 @@
 
 Initial release:
 
-* Basic identification Entity `AbstractEntity`
-* Basic revision Entitie `AbstractRevisionDatesEntity`, `AbstractRevisionDatesDeleteMarkerEntity`, `AbstractRevisionEntity` & `AbstractRevisionDeleteMarkerEntity`
+* Basic identification entity `AbstractEntity`
+* Basic revision entities `AbstractRevisionDatesEntity`, `AbstractRevisionDatesDeleteMarkerEntity`, `AbstractRevisionEntity` & `AbstractRevisionDeleteMarkerEntity`
