@@ -74,8 +74,8 @@ public abstract class AbstractRevisionEntity extends AbstractRevisionDatesEntity
 
     @Override
     public String toString() {
-        return "AbstractRevisionEntity [createdBy=" + createdBy + ", updatedBy=" + updatedBy + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", id="
-                        + id + "]";
+        return "AbstractRevisionEntity [id=" + id + ", createdAt=" + createdAt + ", createdBy=" + createdBy + ", updatedAt=" + updatedAt + ", updatedBy="
+                        + updatedBy + "]";
     }
 
 }

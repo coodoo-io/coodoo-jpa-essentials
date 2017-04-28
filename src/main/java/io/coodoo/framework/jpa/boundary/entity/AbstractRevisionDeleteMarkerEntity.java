@@ -88,8 +88,8 @@ public abstract class AbstractRevisionDeleteMarkerEntity extends AbstractRevisio
 
     @Override
     public String toString() {
-        return "Revison [createdAt=" + createdAt + ", createdBy=" + createdBy + ", updatedAt=" + updatedAt + ", updatedBy=" + updatedBy + ", deletedAt="
-                        + deletedAt + ", deletedBy=" + deletedBy + "]";
+        return "AbstractRevisionDeleteMarkerEntity [id=" + id + ", createdAt=" + createdAt + ", createdBy=" + createdBy + ", updatedAt=" + updatedAt
+                        + ", updatedBy=" + updatedBy + ", deletedAt=" + deletedAt + ", deletedBy=" + deletedBy + "]";
     }
 
 }

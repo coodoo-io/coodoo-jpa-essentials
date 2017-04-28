@@ -65,7 +65,7 @@ public abstract class AbstractRevisionDatesDeleteMarkerEntity extends AbstractRe
 
     @Override
     public String toString() {
-        return "AbstractRevisionDatesDeleteMarkerEntity [deletedAt=" + deletedAt + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", id=" + id + "]";
+        return "AbstractRevisionDatesDeleteMarkerEntity [id=" + id + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", deletedAt=" + deletedAt + "]";
     }
 
 }

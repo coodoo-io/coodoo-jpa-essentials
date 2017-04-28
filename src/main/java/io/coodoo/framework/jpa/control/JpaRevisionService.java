@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import io.coodoo.framework.jpa.boundary.RevisionUser;
@@ -69,13 +70,14 @@ import io.coodoo.framework.jpa.boundary.entity.AbstractRevisionEntity;
 public class JpaRevisionService {
 
     @Inject
-    RevisionUser revisionUser;
+    Instance<RevisionUser> revisionUserInstance;
 
     public void markCreation(AbstractRevisionDatesEntity entity) {
 
         entity.setCreatedAt(now());
 
         if (entity instanceof AbstractRevisionEntity) {
+            RevisionUser revisionUser = revisionUserInstance.get();
             ((AbstractRevisionEntity) entity).setCreatedBy(revisionUser.getUserId());
         }
     }
@@ -87,6 +89,7 @@ public class JpaRevisionService {
                         && (((AbstractRevisionDeleteMarkerEntity) entity).getDeletedAt() != null
                                         || ((AbstractRevisionDeleteMarkerEntity) entity).getDeletedBy() != null)) {
 
+            RevisionUser revisionUser = revisionUserInstance.get();
             ((AbstractRevisionDeleteMarkerEntity) entity).setDeletedAt(now());
             ((AbstractRevisionDeleteMarkerEntity) entity).setDeletedBy(revisionUser.getUserId());
         }
@@ -94,6 +97,7 @@ public class JpaRevisionService {
         entity.setUpdatedAt(now());
 
         if (entity instanceof AbstractRevisionEntity) {
+            RevisionUser revisionUser = revisionUserInstance.get();
             ((AbstractRevisionEntity) entity).setUpdatedBy(revisionUser.getUserId());
         }
     }

@@ -72,7 +72,7 @@ public abstract class AbstractRevisionDatesEntity extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "AbstractRevisionDatesEntity [createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", id=" + id + "]";
+        return "AbstractRevisionDatesEntity [id=" + id + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
     }
 
 }
