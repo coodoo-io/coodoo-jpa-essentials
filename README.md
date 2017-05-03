@@ -69,10 +69,10 @@ You can basically distinguish the revision option in create/update timestamps, p
 
 | Entity                                    | Creation Date | Creation User | Update Date | Update User | Deletion Date | Deletion User |
 |-------------------------------------------|:-------------:|:-------------:|:-----------:|:-----------:|:-------------:|:-------------:|
-| `AbstractRevisionDatesEntity`             |       X       |               |      X      |             |               |               |
-| `AbstractRevisionDatesDeleteMarkerEntity` |       X       |               |      X      |             |      X        |               |
-| `AbstractRevisionEntity`                  |       X       |       X       |      X      |      X      |               |               |
-| `AbstractRevisionDeleteMarkerEntity`      |       X       |       X       |      X      |      X      |      X        |      X        |
+| `AbstractRevisionDatesEntity`             |    &#10003;   |               |   &#10003;  |             |               |               |
+| `AbstractRevisionDatesDeleteMarkerEntity` |    &#10003;   |               |   &#10003;  |             |   &#10003;    |               |
+| `AbstractRevisionEntity`                  |    &#10003;   |    &#10003;   |   &#10003;  |   &#10003;  |               |               |
+| `AbstractRevisionDeleteMarkerEntity`      |    &#10003;   |    &#10003;   |   &#10003;  |   &#10003;  |   &#10003;    |   &#10003;    |
 
 To provide the user ID (currently only type `Long` by the same reasons like the identifier) you have to implement the interface `RevisionUser` where ever you get your current users ID from.
 
