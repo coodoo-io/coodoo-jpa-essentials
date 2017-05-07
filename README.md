@@ -21,13 +21,13 @@ Instead of always writing the same stuff you could just take this fields and fun
 
 ## Install
 
-Add the following dependency to your project ([published on Maven Central](http://search.maven.org/#artifactdetails%7Cio.coodoo%7Ccoodoo-jpa-essentials%7C1.0.0%7Cjar)):
+Add the following dependency to your project ([published on Maven Central](http://search.maven.org/#artifactdetails%7Cio.coodoo%7Ccoodoo-jpa-essentials%7C1.0.1%7Cjar)):
 
 ```xml
 <dependency>
     <groupId>io.coodoo</groupId>
     <artifactId>coodoo-jpa-essentials</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -60,19 +60,16 @@ All entities are annotated by the `@MappedSuperclass`, so all you need is to ext
 
 Since it is the most used identifier the root identification entity `AbstractEntity` comes with an auto incremental `Long` named `id`.
 
+### Optimistic concurrency control 
+
+The root of the OCC entities `AbstractVersionEntity` comes with an `@Version` annotated `Integer` named `version`.
+
 ### Revision entities
 
-All revision entities are using the `AbstractEntity` super class, so they all come with the `id` field.
+All revision entities are using either the `AbstractEntity` or the `AbstractVersionEntity` super class. So they all come with the `id` field and if they are named something like "Version", also the `version` field.
 
 You can basically distinguish the revision option in create/update timestamps, paired with the responsible user and "marked as deleted" flags.
 
-
-| Entity                                    | Creation Date | Creation User | Update Date | Update User | Deletion Date | Deletion User |
-|-------------------------------------------|:-------------:|:-------------:|:-----------:|:-----------:|:-------------:|:-------------:|
-| `AbstractRevisionDatesEntity`             |    &#10003;   |               |   &#10003;  |             |               |               |
-| `AbstractRevisionDatesDeleteMarkerEntity` |    &#10003;   |               |   &#10003;  |             |   &#10003;    |               |
-| `AbstractRevisionEntity`                  |    &#10003;   |    &#10003;   |   &#10003;  |   &#10003;  |               |               |
-| `AbstractRevisionDeleteMarkerEntity`      |    &#10003;   |    &#10003;   |   &#10003;  |   &#10003;  |   &#10003;    |   &#10003;    |
 
 To provide the user ID (currently only type `Long` by the same reasons like the identifier) you have to implement the interface `RevisionUser` where ever you get your current users ID from.
 
@@ -95,13 +92,29 @@ public class UserService implements RevisionUser {
 }
 ```
 
+### Entities
+
+| Entity                                           | ID       | OCC      | Creation Date | Creation User | Update Date | Update User | Deletion Date | Deletion User |
+|--------------------------------------------------|:--------:|:--------:|:-------------:|:-------------:|:-----------:|:-----------:|:-------------:|:-------------:|
+| `AbstractEntity`                                 | &#10003; |          |               |               |             |             |               |               |
+| `AbstractRevisionDatesEntity`                    | &#10003; |          |    &#10003;   |               |   &#10003;  |             |               |               |
+| `AbstractRevisionDatesDeleteMarkerEntity`        | &#10003; |          |    &#10003;   |               |   &#10003;  |             |   &#10003;    |               |
+| `AbstractRevisionEntity`                         | &#10003; |          |    &#10003;   |    &#10003;   |   &#10003;  |   &#10003;  |               |               |
+| `AbstractRevisionDeleteMarkerEntity`             | &#10003; |          |    &#10003;   |    &#10003;   |   &#10003;  |   &#10003;  |   &#10003;    |   &#10003;    |
+| `AbstractVersionEntity`                          | &#10003; | &#10003; |               |               |             |             |               |               |
+| `AbstractVersionRevisionDatesEntity`             | &#10003; | &#10003; |    &#10003;   |               |   &#10003;  |             |               |               |
+| `AbstractVersionRevisionDatesDeleteMarkerEntity` | &#10003; | &#10003; |    &#10003;   |               |   &#10003;  |             |   &#10003;    |               |
+| `AbstractVersionRevisionEntity`                  | &#10003; | &#10003; |    &#10003;   |    &#10003;   |   &#10003;  |   &#10003;  |               |               |
+| `AbstractVersionRevisionDeleteMarkerEntity`      | &#10003; | &#10003; |    &#10003;   |    &#10003;   |   &#10003;  |   &#10003;  |   &#10003;    |   &#10003;    |
+
+
 ### Fields
 
-| Fields      | ID     | Creation Date   | Creation User   | Update Date     | Update User   | Deletion Date   | Deletion User   |
-|-------------|--------|-----------------|-----------------|-----------------|---------------|-----------------|-----------------|
-| Name        | `id`   | `createdAt`     | `createdBy`     | `updatedAt`     | `updatedBy`   | `deletedAt`     | `deletedBy`     |
-| Type        | `Long` | `LocalDateTime` | `Long`          | `LocalDateTime` | `Long`        | `LocalDateTime` | `Long`          |
-| Column      | `id`   | `created_at`    | `created_by`    | `updated_at`    | `updated_by`  | `deleted_at`    | `deleted_by`    |
+| Field       | ID     | OCC       | Creation Date   | Creation User   | Update Date     | Update User   | Deletion Date   | Deletion User   |
+|-------------|--------|-----------|-----------------|-----------------|-----------------|---------------|-----------------|-----------------|
+| Name        | `id`   | `version` | `createdAt`     | `createdBy`     | `updatedAt`     | `updatedBy`   | `deletedAt`     | `deletedBy`     |
+| Type        | `Long` | `Integer` | `LocalDateTime` | `Long`          | `LocalDateTime` | `Long`        | `LocalDateTime` | `Long`          |
+| Column      | `id`   | `version` | `created_at`    | `created_by`    | `updated_at`    | `updated_by`  | `deleted_at`    | `deleted_by`    |
 
 
 ## Changelog

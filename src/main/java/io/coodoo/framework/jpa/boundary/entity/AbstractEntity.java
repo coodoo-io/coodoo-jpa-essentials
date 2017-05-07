@@ -9,7 +9,27 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 /**
- * Base identification entity
+ * Base identification entity <br>
+ * <br>
+ * 
+ * <table border="1" summary="Fields">
+ * <tr>
+ * <th>Fields</th>
+ * <th>ID</th>
+ * </tr>
+ * <tr>
+ * <td>Name</td>
+ * <td>id</td>
+ * </tr>
+ * <tr>
+ * <td>Type</td>
+ * <td>Long</td>
+ * </tr>
+ * <tr>
+ * <td>Column name</td>
+ * <td>id</td>
+ * </tr>
+ * </table>
  * 
  * @author coodoo GmbH (coodoo.io)
  */

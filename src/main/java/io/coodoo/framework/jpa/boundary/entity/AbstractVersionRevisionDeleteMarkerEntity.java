@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 /**
- * Base entity providing identification and automatically sets creation/update/deletion timestamps and user IDs
+ * Base entity providing identification, optimistic concurrency control and automatically sets creation/update/deletion timestamps and user IDs
  * 
  * <br>
  * <br>
@@ -15,6 +15,7 @@ import javax.persistence.MappedSuperclass;
  * <tr>
  * <th>Fields</th>
  * <th>ID</th>
+ * <th>OCC</th>
  * <th>Creation Date</th>
  * <th>Creation User</th>
  * <th>Update Date</th>
@@ -25,6 +26,7 @@ import javax.persistence.MappedSuperclass;
  * <tr>
  * <td>Name</td>
  * <td>id</td>
+ * <td>version</td>
  * <td>createdAt</td>
  * <td>createdBy</td>
  * <td>updatedAt</td>
@@ -35,6 +37,7 @@ import javax.persistence.MappedSuperclass;
  * <tr>
  * <td>Type</td>
  * <td>Long</td>
+ * <td>Integer</td>
  * <td>LocalDateTime</td>
  * <td>Long</td>
  * <td>LocalDateTime</td>
@@ -45,6 +48,7 @@ import javax.persistence.MappedSuperclass;
  * <tr>
  * <td>Column name</td>
  * <td>id</td>
+ * <td>version</td>
  * <td>created_at</td>
  * <td>created_by</td>
  * <td>updated_at</td>
@@ -58,7 +62,7 @@ import javax.persistence.MappedSuperclass;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractRevisionDeleteMarkerEntity extends AbstractRevisionEntity {
+public abstract class AbstractVersionRevisionDeleteMarkerEntity extends AbstractVersionRevisionEntity {
 
     @Column(name = "deleted_at")
     protected LocalDateTime deletedAt;
@@ -88,8 +92,8 @@ public abstract class AbstractRevisionDeleteMarkerEntity extends AbstractRevisio
 
     @Override
     public String toString() {
-        return "AbstractRevisionDeleteMarkerEntity [id=" + id + ", createdAt=" + createdAt + ", createdBy=" + createdBy + ", updatedAt=" + updatedAt
-                        + ", updatedBy=" + updatedBy + ", deletedAt=" + deletedAt + ", deletedBy=" + deletedBy + "]";
+        return "AbstractVersionRevisionDeleteMarkerEntity [id=" + id + ", version=" + version + ", createdAt=" + createdAt + ", createdBy=" + createdBy
+                        + ", updatedAt=" + updatedAt + ", updatedBy=" + updatedBy + ", deletedAt=" + deletedAt + ", deletedBy=" + deletedBy + "]";
     }
 
 }

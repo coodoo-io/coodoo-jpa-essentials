@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 /**
- * Base entity providing identification and revision information.
+ * Base entity providing identification and automatically sets creation/update/deletion timestamps
  * 
  * <br>
  * <br>

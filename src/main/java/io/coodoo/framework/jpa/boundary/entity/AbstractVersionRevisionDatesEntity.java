@@ -9,33 +9,37 @@ import javax.persistence.MappedSuperclass;
 import io.coodoo.framework.jpa.control.JpaRevisionEntityListener;
 
 /**
- * Base entity providing identification and automatically sets creation/update timestamps
+ * Base entity providing identification, optimistic concurrency control and automatically sets creation/update timestamps
  * 
  * <br>
  * <br>
- * 
+ *
  * <table border="1" summary="Fields">
  * <tr>
  * <th>Fields</th>
  * <th>ID</th>
+ * <th>OCC</th>
  * <th>Creation Date</th>
  * <th>Update Date</th>
  * </tr>
  * <tr>
  * <td>Name</td>
  * <td>id</td>
+ * <td>version</td>
  * <td>createdAt</td>
  * <td>updatedAt</td>
  * </tr>
  * <tr>
  * <td>Type</td>
  * <td>Long</td>
+ * <td>Integer</td>
  * <td>LocalDateTime</td>
  * <td>LocalDateTime</td>
  * </tr>
  * <tr>
  * <td>Column name</td>
  * <td>id</td>
+ * <td>version</td>
  * <td>created_at</td>
  * <td>updated_at</td>
  * </tr>
@@ -46,7 +50,7 @@ import io.coodoo.framework.jpa.control.JpaRevisionEntityListener;
 @SuppressWarnings("serial")
 @MappedSuperclass
 @EntityListeners(JpaRevisionEntityListener.class)
-public abstract class AbstractRevisionDatesEntity extends AbstractEntity {
+public abstract class AbstractVersionRevisionDatesEntity extends AbstractVersionEntity {
 
     @Column(name = "created_at", nullable = false)
     protected LocalDateTime createdAt;
@@ -72,7 +76,7 @@ public abstract class AbstractRevisionDatesEntity extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "AbstractRevisionDatesEntity [id=" + id + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
+        return "AbstractVersionRevisionDatesEntity [id=" + id + ", version=" + version + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
     }
 
 }
