@@ -26,7 +26,8 @@ import io.coodoo.framework.jpa.boundary.entity.RevisionEntity;
  * <th>Delete User</th>
  * </tr>
  * <tr>
- * <td>RevisionDatesEntity</td>
+ * <td>RevisionDatesEntity<br>
+ * RevisionDatesOccEntity</td>
  * <td>X</td>
  * <td></td>
  * <td>X</td>
@@ -35,7 +36,8 @@ import io.coodoo.framework.jpa.boundary.entity.RevisionEntity;
  * <td></td>
  * </tr>
  * <tr>
- * <td>RevisionDatesDmEntity</td>
+ * <td>RevisionDatesDmEntity<br>
+ * RevisionDatesDmOccEntity</td>
  * <td>X</td>
  * <td></td>
  * <td>X</td>
@@ -44,7 +46,8 @@ import io.coodoo.framework.jpa.boundary.entity.RevisionEntity;
  * <td></td>
  * </tr>
  * <tr>
- * <td>RevisionEntity</td>
+ * <td>RevisionEntity<br>
+ * RevisionOccEntity</td>
  * <td>X</td>
  * <td>X</td>
  * <td>X</td>
@@ -53,7 +56,8 @@ import io.coodoo.framework.jpa.boundary.entity.RevisionEntity;
  * <td></td>
  * </tr>
  * <tr>
- * <td>RevisionDmEntity</td>
+ * <td>RevisionDmEntity<br>
+ * RevisionDmOccEntity</td>
  * <td>X</td>
  * <td>X</td>
  * <td>X</td>
