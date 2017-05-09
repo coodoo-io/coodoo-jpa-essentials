@@ -8,13 +8,13 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import io.coodoo.framework.jpa.boundary.RevisionUser;
-import io.coodoo.framework.jpa.boundary.entity.AbstractRevisionDatesEntity;
-import io.coodoo.framework.jpa.boundary.entity.AbstractRevisionDeleteMarkerEntity;
-import io.coodoo.framework.jpa.boundary.entity.AbstractRevisionEntity;
+import io.coodoo.framework.jpa.boundary.entity.RevisionDatesEntity;
+import io.coodoo.framework.jpa.boundary.entity.RevisionDmEntity;
+import io.coodoo.framework.jpa.boundary.entity.RevisionEntity;
 
 /**
- * Fills the entites revision attributes
- * 
+ * Fills the entities revision attributes
+ *
  * <table border="1" summary="Fields">
  * <tr>
  * <th>Entity</th>
@@ -26,7 +26,7 @@ import io.coodoo.framework.jpa.boundary.entity.AbstractRevisionEntity;
  * <th>Delete User</th>
  * </tr>
  * <tr>
- * <td>AbstractRevisionDatesEntity</td>
+ * <td>RevisionDatesEntity</td>
  * <td>X</td>
  * <td></td>
  * <td>X</td>
@@ -35,7 +35,7 @@ import io.coodoo.framework.jpa.boundary.entity.AbstractRevisionEntity;
  * <td></td>
  * </tr>
  * <tr>
- * <td>AbstractRevisionDatesDeleteMarkerEntity</td>
+ * <td>RevisionDatesDmEntity</td>
  * <td>X</td>
  * <td></td>
  * <td>X</td>
@@ -44,7 +44,7 @@ import io.coodoo.framework.jpa.boundary.entity.AbstractRevisionEntity;
  * <td></td>
  * </tr>
  * <tr>
- * <td>AbstractRevisionEntity</td>
+ * <td>RevisionEntity</td>
  * <td>X</td>
  * <td>X</td>
  * <td>X</td>
@@ -53,7 +53,7 @@ import io.coodoo.framework.jpa.boundary.entity.AbstractRevisionEntity;
  * <td></td>
  * </tr>
  * <tr>
- * <td>AbstractRevisionDeleteMarkerEntity</td>
+ * <td>RevisionDmEntity</td>
  * <td>X</td>
  * <td>X</td>
  * <td>X</td>
@@ -62,8 +62,8 @@ import io.coodoo.framework.jpa.boundary.entity.AbstractRevisionEntity;
  * <td>X</td>
  * </tr>
  * </table>
- * 
- * 
+ *
+ *
  * @author coodoo GmbH (coodoo.io)
  */
 @Stateless
@@ -72,34 +72,36 @@ public class JpaRevisionService {
     @Inject
     Instance<RevisionUser> revisionUserInstance;
 
-    public void markCreation(AbstractRevisionDatesEntity entity) {
+    public void markCreation(RevisionDatesEntity entity) {
 
         entity.setCreatedAt(now());
 
-        if (entity instanceof AbstractRevisionEntity) {
-            RevisionUser revisionUser = revisionUserInstance.get();
-            ((AbstractRevisionEntity) entity).setCreatedBy(revisionUser.getUserId());
+        if (entity instanceof RevisionEntity) {
+            ((RevisionEntity) entity).setCreatedBy(getUserId());
         }
     }
 
-    public void markUpdate(AbstractRevisionDatesEntity entity) {
+    public void markUpdate(RevisionDatesEntity entity) {
 
-        if (entity instanceof AbstractRevisionDeleteMarkerEntity
+        if (entity instanceof RevisionDmEntity
                         // triggered by a set deletion marker field
-                        && (((AbstractRevisionDeleteMarkerEntity) entity).getDeletedAt() != null
-                                        || ((AbstractRevisionDeleteMarkerEntity) entity).getDeletedBy() != null)) {
+                        && (((RevisionDmEntity) entity).getDeletedAt() != null || ((RevisionDmEntity) entity).getDeletedBy() != null)) {
 
-            RevisionUser revisionUser = revisionUserInstance.get();
-            ((AbstractRevisionDeleteMarkerEntity) entity).setDeletedAt(now());
-            ((AbstractRevisionDeleteMarkerEntity) entity).setDeletedBy(revisionUser.getUserId());
+            ((RevisionDmEntity) entity).setDeletedAt(now());
+            ((RevisionDmEntity) entity).setDeletedBy(getUserId());
+            return;
         }
 
         entity.setUpdatedAt(now());
 
-        if (entity instanceof AbstractRevisionEntity) {
-            RevisionUser revisionUser = revisionUserInstance.get();
-            ((AbstractRevisionEntity) entity).setUpdatedBy(revisionUser.getUserId());
+        if (entity instanceof RevisionEntity) {
+            ((RevisionEntity) entity).setUpdatedBy(getUserId());
         }
+    }
+
+    private Long getUserId() {
+        RevisionUser revisionUser = revisionUserInstance.get();
+        return revisionUser.getUserId();
     }
 
     private LocalDateTime now() {

@@ -4,16 +4,15 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 /**
- * Base entity providing identification, optimistic concurrency control and automatically sets creation/update timestamps and user IDs
+ * Base entity providing identification and automatically sets creation/update timestamps and user IDs
  * 
  * <br>
  * <br>
- *
+ * 
  * <table border="1" summary="Fields">
  * <tr>
  * <th>Fields</th>
  * <th>ID</th>
- * <th>OCC</th>
  * <th>Creation Date</th>
  * <th>Creation User</th>
  * <th>Update Date</th>
@@ -22,7 +21,6 @@ import javax.persistence.MappedSuperclass;
  * <tr>
  * <td>Name</td>
  * <td>id</td>
- * <td>version</td>
  * <td>createdAt</td>
  * <td>createdBy</td>
  * <td>updatedAt</td>
@@ -31,7 +29,6 @@ import javax.persistence.MappedSuperclass;
  * <tr>
  * <td>Type</td>
  * <td>Long</td>
- * <td>Integer</td>
  * <td>LocalDateTime</td>
  * <td>Long</td>
  * <td>LocalDateTime</td>
@@ -40,7 +37,6 @@ import javax.persistence.MappedSuperclass;
  * <tr>
  * <td>Column name</td>
  * <td>id</td>
- * <td>version</td>
  * <td>created_at</td>
  * <td>created_by</td>
  * <td>updated_at</td>
@@ -52,7 +48,7 @@ import javax.persistence.MappedSuperclass;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractVersionRevisionEntity extends AbstractVersionRevisionDatesEntity {
+public abstract class RevisionEntity extends RevisionDatesEntity {
 
     @Column(name = "created_by")
     protected Long createdBy;
@@ -78,8 +74,8 @@ public abstract class AbstractVersionRevisionEntity extends AbstractVersionRevis
 
     @Override
     public String toString() {
-        return "AbstractVersionRevisionEntity [id=" + id + ", version=" + version + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", createdBy="
-                        + createdBy + ", updatedBy=" + updatedBy + "]";
+        return "AbstractRevisionEntity [id=" + id + ", createdAt=" + createdAt + ", createdBy=" + createdBy + ", updatedAt=" + updatedAt + ", updatedBy="
+                        + updatedBy + "]";
     }
 
 }

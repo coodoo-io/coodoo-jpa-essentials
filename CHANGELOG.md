@@ -6,13 +6,18 @@
 ### BREAKING CHANGES
 -->
 
-<a name="1.0.1"></a>
+<a name="1.1.0"></a>
 
-## 1.0.1 (2017-05-08)
+## 1.1.0 (2017-05-09)
 
 ### Features
 
-* Added abstract optimistic concurrency control entities
+* Added abstract optimistic concurrency control entities (`*OccEntity.java`)
+* There are DTOs for all entities
+
+### BREAKING CHANGES
+
+* Renamed all entities
 
 <a name="1.0.0"></a>
 

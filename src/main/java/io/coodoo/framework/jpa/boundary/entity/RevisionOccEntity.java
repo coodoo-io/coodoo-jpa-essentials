@@ -5,30 +5,46 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
 /**
- * Base identification entity with optimistic concurrency control version number
+ * Base entity providing identification, automatically sets creation/update timestamps and user IDs and optimistic concurrency control
  * 
  * <br>
  * <br>
- * 
+ *
  * <table border="1" summary="Fields">
  * <tr>
  * <th>Fields</th>
  * <th>ID</th>
+ * <th>Creation Date</th>
+ * <th>Creation User</th>
+ * <th>Update Date</th>
+ * <th>Update User</th>
  * <th>OCC</th>
  * </tr>
  * <tr>
  * <td>Name</td>
  * <td>id</td>
+ * <td>createdAt</td>
+ * <td>createdBy</td>
+ * <td>updatedAt</td>
+ * <td>updatedBy</td>
  * <td>version</td>
  * </tr>
  * <tr>
  * <td>Type</td>
+ * <td>Long</td>
+ * <td>LocalDateTime</td>
+ * <td>Long</td>
+ * <td>LocalDateTime</td>
  * <td>Long</td>
  * <td>Integer</td>
  * </tr>
  * <tr>
  * <td>Column name</td>
  * <td>id</td>
+ * <td>created_at</td>
+ * <td>created_by</td>
+ * <td>updated_at</td>
+ * <td>updated_by</td>
  * <td>version</td>
  * </tr>
  * </table>
@@ -37,7 +53,7 @@ import javax.persistence.Version;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractVersionEntity extends AbstractEntity {
+public abstract class RevisionOccEntity extends RevisionEntity {
 
     @Version
     @Column(name = "version")
@@ -53,7 +69,8 @@ public abstract class AbstractVersionEntity extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "AbstractVersionEntity [id=" + id + ", version=" + version + "]";
+        return "RevisionOccEntity [id=" + id + ", createdAt=" + createdAt + ", createdBy=" + createdBy + ", updatedAt=" + updatedAt + ", updatedBy=" + updatedBy
+                        + ", version=" + version + "]";
     }
 
 }

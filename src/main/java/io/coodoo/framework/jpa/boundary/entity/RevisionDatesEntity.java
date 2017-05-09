@@ -46,7 +46,7 @@ import io.coodoo.framework.jpa.control.JpaRevisionEntityListener;
 @SuppressWarnings("serial")
 @MappedSuperclass
 @EntityListeners(JpaRevisionEntityListener.class)
-public abstract class AbstractRevisionDatesEntity extends AbstractEntity {
+public abstract class RevisionDatesEntity extends BaseEntity {
 
     @Column(name = "created_at", nullable = false)
     protected LocalDateTime createdAt;
