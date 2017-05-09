@@ -6,39 +6,51 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 /**
- * Base entity providing identification and revision information.
+ * Base entity providing identification and automatically sets creation/update/deletion timestamps and user IDs
  * 
  * <br>
  * <br>
- * 
+ *
  * <table border="1" summary="Fields">
  * <tr>
  * <th>Fields</th>
  * <th>ID</th>
  * <th>Creation Date</th>
+ * <th>Creation User</th>
  * <th>Update Date</th>
+ * <th>Update User</th>
  * <th>Deletion Date</th>
+ * <th>Deletion User</th>
  * </tr>
  * <tr>
  * <td>Name</td>
  * <td>id</td>
  * <td>createdAt</td>
+ * <td>createdBy</td>
  * <td>updatedAt</td>
+ * <td>updatedBy</td>
  * <td>deletedAt</td>
+ * <td>deletedBy</td>
  * </tr>
  * <tr>
  * <td>Type</td>
  * <td>Long</td>
  * <td>LocalDateTime</td>
+ * <td>Long</td>
  * <td>LocalDateTime</td>
+ * <td>Long</td>
  * <td>LocalDateTime</td>
+ * <td>Long</td>
  * </tr>
  * <tr>
  * <td>Column name</td>
  * <td>id</td>
  * <td>created_at</td>
+ * <td>created_by</td>
  * <td>updated_at</td>
+ * <td>updated_by</td>
  * <td>deleted_at</td>
+ * <td>deleted_by</td>
  * </tr>
  * </table>
  * 
@@ -46,10 +58,13 @@ import javax.persistence.MappedSuperclass;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractRevisionDatesDeleteMarkerEntity extends AbstractRevisionDatesEntity {
+public abstract class RevisionDmEntity extends RevisionEntity {
 
     @Column(name = "deleted_at")
     protected LocalDateTime deletedAt;
+
+    @Column(name = "deleted_by")
+    protected Long deletedBy;
 
     public boolean isDeleted() {
         return deletedAt != null;
@@ -63,9 +78,18 @@ public abstract class AbstractRevisionDatesDeleteMarkerEntity extends AbstractRe
         this.deletedAt = deletedAt;
     }
 
+    public Long getDeletedBy() {
+        return deletedBy;
+    }
+
+    public void setDeletedBy(Long deletedBy) {
+        this.deletedBy = deletedBy;
+    }
+
     @Override
     public String toString() {
-        return "AbstractRevisionDatesDeleteMarkerEntity [id=" + id + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", deletedAt=" + deletedAt + "]";
+        return "AbstractRevisionDeleteMarkerEntity [id=" + id + ", createdAt=" + createdAt + ", createdBy=" + createdBy + ", updatedAt=" + updatedAt
+                        + ", updatedBy=" + updatedBy + ", deletedAt=" + deletedAt + ", deletedBy=" + deletedBy + "]";
     }
 
 }

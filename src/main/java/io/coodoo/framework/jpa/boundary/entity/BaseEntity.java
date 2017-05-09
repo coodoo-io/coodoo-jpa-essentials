@@ -9,13 +9,33 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 /**
- * Base identification entity
+ * Base identification entity <br>
+ * <br>
+ * 
+ * <table border="1" summary="Fields">
+ * <tr>
+ * <th>Fields</th>
+ * <th>ID</th>
+ * </tr>
+ * <tr>
+ * <td>Name</td>
+ * <td>id</td>
+ * </tr>
+ * <tr>
+ * <td>Type</td>
+ * <td>Long</td>
+ * </tr>
+ * <tr>
+ * <td>Column name</td>
+ * <td>id</td>
+ * </tr>
+ * </table>
  * 
  * @author coodoo GmbH (coodoo.io)
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractEntity implements Serializable {
+public abstract class BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,7 +69,7 @@ public abstract class AbstractEntity implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (obj == null || !(obj instanceof AbstractEntity)) {
+        if (obj == null || !(obj instanceof BaseEntity)) {
             return false;
         }
 
@@ -57,10 +77,10 @@ public abstract class AbstractEntity implements Serializable {
             return false;
         }
 
-        if (((AbstractEntity) obj).getId() == null) {
+        if (((BaseEntity) obj).getId() == null) {
             return false;
         }
-        return ((AbstractEntity) obj).getId().equals(getId());
+        return ((BaseEntity) obj).getId().equals(getId());
     }
 
 }

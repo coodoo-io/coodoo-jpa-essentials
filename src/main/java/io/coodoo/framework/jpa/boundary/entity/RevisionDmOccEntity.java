@@ -1,12 +1,11 @@
 package io.coodoo.framework.jpa.boundary.entity;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 
 /**
- * Base entity providing identification and revision information.
+ * Base entity providing identification, automatically sets creation/update/deletion timestamps and user IDs and optimistic concurrency control
  * 
  * <br>
  * <br>
@@ -21,6 +20,7 @@ import javax.persistence.MappedSuperclass;
  * <th>Update User</th>
  * <th>Deletion Date</th>
  * <th>Deletion User</th>
+ * <th>OCC</th>
  * </tr>
  * <tr>
  * <td>Name</td>
@@ -31,6 +31,7 @@ import javax.persistence.MappedSuperclass;
  * <td>updatedBy</td>
  * <td>deletedAt</td>
  * <td>deletedBy</td>
+ * <td>version</td>
  * </tr>
  * <tr>
  * <td>Type</td>
@@ -41,6 +42,7 @@ import javax.persistence.MappedSuperclass;
  * <td>Long</td>
  * <td>LocalDateTime</td>
  * <td>Long</td>
+ * <td>Integer</td>
  * </tr>
  * <tr>
  * <td>Column name</td>
@@ -51,6 +53,7 @@ import javax.persistence.MappedSuperclass;
  * <td>updated_by</td>
  * <td>deleted_at</td>
  * <td>deleted_by</td>
+ * <td>version</td>
  * </tr>
  * </table>
  * 
@@ -58,38 +61,24 @@ import javax.persistence.MappedSuperclass;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractRevisionDeleteMarkerEntity extends AbstractRevisionEntity {
+public abstract class RevisionDmOccEntity extends RevisionDmEntity {
 
-    @Column(name = "deleted_at")
-    protected LocalDateTime deletedAt;
+    @Version
+    @Column(name = "version")
+    protected Integer version = 0;
 
-    @Column(name = "deleted_by")
-    protected Long deletedBy;
-
-    public boolean isDeleted() {
-        return deletedAt != null;
+    public Integer getVersion() {
+        return version;
     }
 
-    public LocalDateTime getDeletedAt() {
-        return deletedAt;
-    }
-
-    public void setDeletedAt(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
-    public Long getDeletedBy() {
-        return deletedBy;
-    }
-
-    public void setDeletedBy(Long deletedBy) {
-        this.deletedBy = deletedBy;
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     @Override
     public String toString() {
-        return "AbstractRevisionDeleteMarkerEntity [id=" + id + ", createdAt=" + createdAt + ", createdBy=" + createdBy + ", updatedAt=" + updatedAt
-                        + ", updatedBy=" + updatedBy + ", deletedAt=" + deletedAt + ", deletedBy=" + deletedBy + "]";
+        return "RevisionDmOccEntity [id=" + id + ", createdAt=" + createdAt + ", createdBy=" + createdBy + ", updatedAt=" + updatedAt + ", updatedBy="
+                        + updatedBy + ", deletedAt=" + deletedAt + ", deletedBy=" + deletedBy + ", version=" + version + "]";
     }
 
 }

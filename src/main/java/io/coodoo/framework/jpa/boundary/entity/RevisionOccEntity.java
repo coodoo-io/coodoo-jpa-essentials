@@ -2,13 +2,14 @@ package io.coodoo.framework.jpa.boundary.entity;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 
 /**
- * Base entity providing identification and revision information.
+ * Base entity providing identification, automatically sets creation/update timestamps and user IDs and optimistic concurrency control
  * 
  * <br>
  * <br>
- * 
+ *
  * <table border="1" summary="Fields">
  * <tr>
  * <th>Fields</th>
@@ -17,6 +18,7 @@ import javax.persistence.MappedSuperclass;
  * <th>Creation User</th>
  * <th>Update Date</th>
  * <th>Update User</th>
+ * <th>OCC</th>
  * </tr>
  * <tr>
  * <td>Name</td>
@@ -25,6 +27,7 @@ import javax.persistence.MappedSuperclass;
  * <td>createdBy</td>
  * <td>updatedAt</td>
  * <td>updatedBy</td>
+ * <td>version</td>
  * </tr>
  * <tr>
  * <td>Type</td>
@@ -33,6 +36,7 @@ import javax.persistence.MappedSuperclass;
  * <td>Long</td>
  * <td>LocalDateTime</td>
  * <td>Long</td>
+ * <td>Integer</td>
  * </tr>
  * <tr>
  * <td>Column name</td>
@@ -41,6 +45,7 @@ import javax.persistence.MappedSuperclass;
  * <td>created_by</td>
  * <td>updated_at</td>
  * <td>updated_by</td>
+ * <td>version</td>
  * </tr>
  * </table>
  * 
@@ -48,34 +53,24 @@ import javax.persistence.MappedSuperclass;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractRevisionEntity extends AbstractRevisionDatesEntity {
+public abstract class RevisionOccEntity extends RevisionEntity {
 
-    @Column(name = "created_by")
-    protected Long createdBy;
+    @Version
+    @Column(name = "version")
+    protected Integer version = 0;
 
-    @Column(name = "updated_by")
-    protected Long updatedBy;
-
-    public Long getCreatedBy() {
-        return createdBy;
+    public Integer getVersion() {
+        return version;
     }
 
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Long getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(Long updatedBy) {
-        this.updatedBy = updatedBy;
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     @Override
     public String toString() {
-        return "AbstractRevisionEntity [id=" + id + ", createdAt=" + createdAt + ", createdBy=" + createdBy + ", updatedAt=" + updatedAt + ", updatedBy="
-                        + updatedBy + "]";
+        return "RevisionOccEntity [id=" + id + ", createdAt=" + createdAt + ", createdBy=" + createdBy + ", updatedAt=" + updatedAt + ", updatedBy=" + updatedBy
+                        + ", version=" + version + "]";
     }
 
 }

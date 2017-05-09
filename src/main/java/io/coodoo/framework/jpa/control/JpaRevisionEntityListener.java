@@ -5,7 +5,7 @@ import javax.ejb.Stateless;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
-import io.coodoo.framework.jpa.boundary.entity.AbstractRevisionDatesEntity;
+import io.coodoo.framework.jpa.boundary.entity.RevisionDatesEntity;
 
 /**
  * Intercepts JPA events to set revision information
@@ -19,13 +19,13 @@ public class JpaRevisionEntityListener {
     JpaRevisionService jpaRevisionService;
 
     @PrePersist
-    public void create(AbstractRevisionDatesEntity entity) {
+    public void create(RevisionDatesEntity entity) {
 
         jpaRevisionService.markCreation(entity);
     }
 
     @PreUpdate
-    public void update(AbstractRevisionDatesEntity entity) {
+    public void update(RevisionDatesEntity entity) {
 
         jpaRevisionService.markUpdate(entity);
     }

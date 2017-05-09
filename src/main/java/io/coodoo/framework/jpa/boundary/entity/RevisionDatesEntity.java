@@ -9,7 +9,7 @@ import javax.persistence.MappedSuperclass;
 import io.coodoo.framework.jpa.control.JpaRevisionEntityListener;
 
 /**
- * Base entity providing identification and revision information.
+ * Base entity providing identification and automatically sets creation/update timestamps
  * 
  * <br>
  * <br>
@@ -46,7 +46,7 @@ import io.coodoo.framework.jpa.control.JpaRevisionEntityListener;
 @SuppressWarnings("serial")
 @MappedSuperclass
 @EntityListeners(JpaRevisionEntityListener.class)
-public abstract class AbstractRevisionDatesEntity extends AbstractEntity {
+public abstract class RevisionDatesEntity extends BaseEntity {
 
     @Column(name = "created_at", nullable = false)
     protected LocalDateTime createdAt;

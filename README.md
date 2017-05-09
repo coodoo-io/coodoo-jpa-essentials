@@ -21,25 +21,25 @@ Instead of always writing the same stuff you could just take this fields and fun
 
 ## Install
 
-Add the following dependency to your project ([published on Maven Central](http://search.maven.org/#artifactdetails%7Cio.coodoo%7Ccoodoo-jpa-essentials%7C1.0.0%7Cjar)):
+Add the following dependency to your project ([published on Maven Central](http://search.maven.org/#artifactdetails%7Cio.coodoo%7Ccoodoo-jpa-essentials%7C1.1.0%7Cjar)):
 
 ```xml
 <dependency>
     <groupId>io.coodoo</groupId>
     <artifactId>coodoo-jpa-essentials</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
 ## Usage
 
-Following example will not only provide you an `@Id` annotated field, but also the revision field that will store the timestamp of the creation and updates:
+Following example will not only provide you an `@Id` annotated field, but also the revision field that will store the timestamps of creations and updates:
 
 ```java
-import io.coodoo.framework.jpa.boundary.entity.AbstractRevisionDatesEntity;
+import io.coodoo.framework.jpa.boundary.entity.RevisionDatesEntity;
 
 @Entity
-public class SomeEntity extends AbstractRevisionDatesEntity {
+public class SomeEntity extends RevisionDatesEntity {
 
     @Column
     private String something;
@@ -58,21 +58,18 @@ All entities are annotated by the `@MappedSuperclass`, so all you need is to ext
 
 ### Identification entity
 
-Since it is the most used identifier the root identification entity `AbstractEntity` comes with an auto incremental `Long` named `id`.
+Since it is the most used identifier the root identification entity `BaseEntity` comes with an auto incremental `Long` named `id`.
+
+### Optimistic concurrency control 
+
+Every entity is inherited by an OCC entity `*OccEntity` that comes with an `@Version` annotated `Integer` named `version` as optimistic concurrency control value.
 
 ### Revision entities
 
-All revision entities are using the `AbstractEntity` super class, so they all come with the `id` field.
+All revision entities are using the `RevisionDatesEntity` super class. So they all come at least with `id`, `createdAt` and `updatedAt` field and if they are named something like "Occ", also the `version` field.
 
 You can basically distinguish the revision option in create/update timestamps, paired with the responsible user and "marked as deleted" flags.
 
-
-| Entity                                    | Creation Date | Creation User | Update Date | Update User | Deletion Date | Deletion User |
-|-------------------------------------------|:-------------:|:-------------:|:-----------:|:-----------:|:-------------:|:-------------:|
-| `AbstractRevisionDatesEntity`             |    &#10003;   |               |   &#10003;  |             |               |               |
-| `AbstractRevisionDatesDeleteMarkerEntity` |    &#10003;   |               |   &#10003;  |             |   &#10003;    |               |
-| `AbstractRevisionEntity`                  |    &#10003;   |    &#10003;   |   &#10003;  |   &#10003;  |               |               |
-| `AbstractRevisionDeleteMarkerEntity`      |    &#10003;   |    &#10003;   |   &#10003;  |   &#10003;  |   &#10003;    |   &#10003;    |
 
 To provide the user ID (currently only type `Long` by the same reasons like the identifier) you have to implement the interface `RevisionUser` where ever you get your current users ID from.
 
@@ -97,12 +94,31 @@ public class UserService implements RevisionUser {
 
 ### Fields
 
-| Fields      | ID     | Creation Date   | Creation User   | Update Date     | Update User   | Deletion Date   | Deletion User   |
-|-------------|--------|-----------------|-----------------|-----------------|---------------|-----------------|-----------------|
-| Name        | `id`   | `createdAt`     | `createdBy`     | `updatedAt`     | `updatedBy`   | `deletedAt`     | `deletedBy`     |
-| Type        | `Long` | `LocalDateTime` | `Long`          | `LocalDateTime` | `Long`        | `LocalDateTime` | `Long`          |
-| Column      | `id`   | `created_at`    | `created_by`    | `updated_at`    | `updated_by`  | `deleted_at`    | `deleted_by`    |
+| Field         | Name          | Type            | Column       | Description                                                 |
+|---------------|---------------|-----------------|--------------|-------------------------------------------------------------|
+| ID            | `id`          | `Long`          | `id`         | Auto incremental identifier                                 |
+| Creation Date | `createdAt`   | `LocalDateTime` | `created_at` | Timestamp of creation                                       |
+| Creation User | `createdBy`   | `Long`          | `created_by` | ID of user who triggered the creation                       |
+| Update Date   | `updatedAt`   | `LocalDateTime` | `updated_at` | Timestamp of last update                                    |
+| Update User   | `updatedBy`   | `Long`          | `updated_by` | ID of user who triggered the update                         |
+| Deletion Date | `deletedAt`   | `LocalDateTime` | `deleted_at` | Timestamp of deletion (just marked)                         |
+| Deletion User | `deletedBy`   | `Long`          | `deleted_by` | ID of user who triggered the deletion                       |
+| OCC           | `version`     | `Integer`       | `version`    | Optimistic concurrency control value                        |
 
+### Entities
+
+| Entity                     | ID       | Creat. Date | Creat. User | Upd. Date | Upd. User | Del. Date | Del. User | OCC      |
+|----------------------------|:--------:|:-----------:|:-----------:|:---------:|:---------:|:---------:|:---------:|:--------:|
+| `BaseEntity`               | &#10003; |             |             |           |           |           |           |          |
+| `BaseOccEntity`            | &#10003; |             |             |           |           |           |           | &#10003; |
+| `RevisionDatesEntity`      | &#10003; | &#10003;    |             | &#10003;  |           |           |           |          |
+| `RevisionDatesOccEntity`   | &#10003; | &#10003;    |             | &#10003;  |           |           |           | &#10003; |
+| `RevisionDatesDmEntity`    | &#10003; | &#10003;    |             | &#10003;  |           | &#10003;  |           |          |
+| `RevisionDatesDmOccEntity` | &#10003; | &#10003;    |             | &#10003;  |           | &#10003;  |           | &#10003; |
+| `RevisionEntity`           | &#10003; | &#10003;    | &#10003;    | &#10003;  | &#10003;  |           |           |          |
+| `RevisionOccEntity`        | &#10003; | &#10003;    | &#10003;    | &#10003;  | &#10003;  |           |           | &#10003; |
+| `RevisionDmEntity`         | &#10003; | &#10003;    | &#10003;    | &#10003;  | &#10003;  | &#10003;  | &#10003;  |          |
+| `RevisionDmOccEntity`      | &#10003; | &#10003;    | &#10003;    | &#10003;  | &#10003;  | &#10003;  | &#10003;  | &#10003; |
 
 ## Changelog
 
