@@ -6,6 +6,15 @@
 ### BREAKING CHANGES
 -->
 
+<a name="1.1.1"></a>
+
+## 1.1.1 (2018-10-15)
+
+### Features
+
+ * Configuration via properties file (coodoo.jpa-essentials.properties)
+ * Configuration static loader
+
 <a name="1.1.0"></a>
 
 ## 1.1.0 (2017-05-09)

@@ -83,9 +83,22 @@ public class JpaRevisionService {
         if (entity instanceof RevisionEntity) {
             ((RevisionEntity) entity).setCreatedBy(getUserId());
         }
+
+        if (JpaEssentialsConfig.FILL_UPDATED_ON_CREATION) {
+            markUpdate(entity);
+        }
     }
 
     public void markUpdate(RevisionDatesEntity entity) {
+
+        entity.setUpdatedAt(now());
+
+        if (entity instanceof RevisionEntity) {
+            ((RevisionEntity) entity).setUpdatedBy(getUserId());
+        }
+    }
+
+    public void markChange(RevisionDatesEntity entity) {
 
         if (entity instanceof RevisionDmEntity
                         // triggered by a set deletion marker field
@@ -96,11 +109,7 @@ public class JpaRevisionService {
             return;
         }
 
-        entity.setUpdatedAt(now());
-
-        if (entity instanceof RevisionEntity) {
-            ((RevisionEntity) entity).setUpdatedBy(getUserId());
-        }
+        markUpdate(entity);
     }
 
     private Long getUserId() {
@@ -109,7 +118,7 @@ public class JpaRevisionService {
     }
 
     private LocalDateTime now() {
-        return LocalDateTime.now(ZoneId.of("UTC"));
+        return LocalDateTime.now(ZoneId.of(JpaEssentialsConfig.LOCAL_DATE_TIME_ZONE));
     }
 
 }

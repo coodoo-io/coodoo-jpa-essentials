@@ -21,13 +21,13 @@ Instead of always writing the same stuff you could just take this fields and fun
 
 ## Install
 
-Add the following dependency to your project ([published on Maven Central](http://search.maven.org/#artifactdetails%7Cio.coodoo%7Ccoodoo-jpa-essentials%7C1.1.0%7Cjar)):
+Add the following dependency to your project ([published on Maven Central](http://search.maven.org/#artifactdetails%7Cio.coodoo%7Ccoodoo-jpa-essentials%7C1.1.1%7Cjar)):
 
 ```xml
 <dependency>
     <groupId>io.coodoo</groupId>
     <artifactId>coodoo-jpa-essentials</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
@@ -119,6 +119,12 @@ public class UserService implements RevisionUser {
 | `RevisionOccEntity`        | &#10003; | &#10003;    | &#10003;    | &#10003;  | &#10003;  |           |           | &#10003; |
 | `RevisionDmEntity`         | &#10003; | &#10003;    | &#10003;    | &#10003;  | &#10003;  | &#10003;  | &#10003;  |          |
 | `RevisionDmOccEntity`      | &#10003; | &#10003;    | &#10003;    | &#10003;  | &#10003;  | &#10003;  | &#10003;  | &#10003; |
+
+## Configuration
+
+To provide own configuration you need to add a property file named `coodoo.jpa-essentials.properties` to your project. This file gets read on JavaEE server startup if available or manually by calling `JpaEssentialsConfig.loadProperties()`;
+
+You can find a template [here](https://github.com/coodoo-io/coodoo-listing/tree/master/src/main/resources/example.coodoo.listing.properties)
 
 ## Changelog
 

@@ -27,7 +27,7 @@ public class JpaRevisionEntityListener {
     @PreUpdate
     public void update(RevisionDatesEntity entity) {
 
-        jpaRevisionService.markUpdate(entity);
+        jpaRevisionService.markChange(entity);
     }
 
 }
