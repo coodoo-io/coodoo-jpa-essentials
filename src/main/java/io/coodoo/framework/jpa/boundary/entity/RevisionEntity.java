@@ -3,6 +3,9 @@ package io.coodoo.framework.jpa.boundary.entity;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
+import io.coodoo.framework.jpa.boundary.CreatedBy;
+import io.coodoo.framework.jpa.boundary.UpdatedBy;
+
 /**
  * Base entity providing identification and automatically sets creation/update timestamps and user IDs
  * 
@@ -48,7 +51,7 @@ import javax.persistence.MappedSuperclass;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class RevisionEntity extends RevisionDatesEntity {
+public abstract class RevisionEntity extends RevisionDatesEntity implements CreatedBy, UpdatedBy {
 
     @Column(name = "created_by")
     protected Long createdBy;

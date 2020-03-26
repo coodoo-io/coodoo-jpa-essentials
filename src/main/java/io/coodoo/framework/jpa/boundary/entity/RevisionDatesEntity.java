@@ -6,7 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 
-import io.coodoo.framework.jpa.control.JpaRevisionEntityListener;
+import io.coodoo.framework.jpa.boundary.CreatedAt;
+import io.coodoo.framework.jpa.boundary.JpaEssentialsEntityListener;
+import io.coodoo.framework.jpa.boundary.UpdatedAt;
 
 /**
  * Base entity providing identification and automatically sets creation/update timestamps
@@ -45,8 +47,8 @@ import io.coodoo.framework.jpa.control.JpaRevisionEntityListener;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-@EntityListeners(JpaRevisionEntityListener.class)
-public abstract class RevisionDatesEntity extends BaseEntity {
+@EntityListeners(JpaEssentialsEntityListener.class)
+public abstract class RevisionDatesEntity extends BaseEntity implements CreatedAt, UpdatedAt {
 
     @Column(name = "created_at", nullable = false)
     protected LocalDateTime createdAt;

@@ -1,56 +1,60 @@
-package io.coodoo.framework.jpa.boundary.entity;
+package io.coodoo.framework.jpa.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
 
 import io.coodoo.framework.jpa.boundary.DeletedAt;
+import io.coodoo.framework.jpa.boundary.JpaEssentialsEntityListener;
 
 /**
- * Base entity providing identification and automatically sets creation/update/deletion timestamps
- * 
- * <br>
+ * This {@link MappedSuperclass} is {@link Serializable}, attached to the {@link JpaEssentialsEntityListener} and provides the fields in this table:<br>
  * <br>
  * 
  * <table border="1" summary="Fields">
+ * <tbody>
  * <tr>
- * <th>Fields</th>
- * <th>ID</th>
- * <th>Creation Date</th>
- * <th>Update Date</th>
- * <th>Deletion Date</th>
+ * <th></th>
+ * <th>Field</th>
+ * <th>Type</th>
+ * <th>Column</th>
+ * <th>Info</th>
  * </tr>
  * <tr>
- * <td>Name</td>
- * <td>id</td>
- * <td>createdAt</td>
- * <td>updatedAt</td>
- * <td>deletedAt</td>
+ * <td><b>Creation Date</b></td>
+ * <td>{@link #createdAt}</td>
+ * <td>{@link LocalDateTime}</td>
+ * <td><code>created_at</code></td>
+ * <td>The current time is set the moment this entity is persisted ({@link PrePersist} callback)</td>
  * </tr>
  * <tr>
- * <td>Type</td>
- * <td>Long</td>
- * <td>LocalDateTime</td>
- * <td>LocalDateTime</td>
- * <td>LocalDateTime</td>
+ * <td><b>Update Date</b></td>
+ * <td>{@link #updatedAt}</td>
+ * <td>{@link LocalDateTime}</td>
+ * <td><code>updated_at</code></td>
+ * <td>The current time is set the moment this entity is updated ({@link PreUpdate} callback)</td>
  * </tr>
  * <tr>
- * <td>Column name</td>
- * <td>id</td>
- * <td>created_at</td>
- * <td>updated_at</td>
- * <td>deleted_at</td>
+ * <td><b>Deletion Date</b></td>
+ * <td>{@link #deletedAt}</td>
+ * <td>{@link LocalDateTime}</td>
+ * <td><code>deleted_at</code></td>
+ * <td>The current time is set to mark this entity as deleted ({@link PreUpdate} callback). You can mark it by calling {@link #markAsDeleted()}</td>
  * </tr>
+ * </tbody>
  * </table>
  * 
  * @author coodoo GmbH (coodoo.io)
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class RevisionDatesDmEntity extends RevisionDatesEntity implements DeletedAt {
+public abstract class AbstractCreatedUpdatedDeletedAtEntity extends AbstractCreatedUpdatedAtEntity implements DeletedAt {
 
     @Column(name = "deleted_at")
     protected LocalDateTime deletedAt;
@@ -59,14 +63,12 @@ public abstract class RevisionDatesDmEntity extends RevisionDatesEntity implemen
     @Transient
     private boolean markedAsDeleted = false;
 
-    public boolean isDeleted() {
-        return deletedAt != null;
-    }
-
+    @Override
     public LocalDateTime getDeletedAt() {
         return deletedAt;
     }
 
+    @Override
     public void setDeletedAt(LocalDateTime deletedAt) {
         this.deletedAt = deletedAt;
     }
@@ -93,7 +95,17 @@ public abstract class RevisionDatesDmEntity extends RevisionDatesEntity implemen
 
     @Override
     public String toString() {
-        return "AbstractRevisionDatesDeleteMarkerEntity [id=" + id + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", deletedAt=" + deletedAt + "]";
+        StringBuilder builder = new StringBuilder();
+        builder.append("AbstractCreatedUpdatedDeletedAtEntity [createdAt=");
+        builder.append(createdAt);
+        builder.append(", updatedAt=");
+        builder.append(updatedAt);
+        builder.append(", deletedAt=");
+        builder.append(deletedAt);
+        builder.append(", markedAsDeleted=");
+        builder.append(markedAsDeleted);
+        builder.append("]");
+        return builder.toString();
     }
 
 }

@@ -6,6 +6,16 @@
 ### BREAKING CHANGES
 -->
 
+<a name="1.2.0"></a>
+
+## 1.2.0 (2020-03-26)
+
+### Features
+
+ * There is no EJB (`javax.ejb.*`) anymore!
+ * Changed the package structure to a more BCEish pattern. The old package structure and classes remain but are marked as deprecated and the future is uncertain for them...
+
+
 <a name="1.1.1"></a>
 
 ## 1.1.1 (2018-12-12)

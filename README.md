@@ -21,13 +21,13 @@ Instead of always writing the same stuff you could just take this fields and fun
 
 ## Install
 
-Add the following dependency to your project ([published on Maven Central](http://search.maven.org/#artifactdetails%7Cio.coodoo%7Ccoodoo-jpa-essentials%7C1.1.1%7Cjar)):
+Add the following dependency to your project ([published on Maven Central](http://search.maven.org/#artifactdetails%7Cio.coodoo%7Ccoodoo-jpa-essentials%7C1.2.0%7Cjar)):
 
 ```xml
 <dependency>
     <groupId>io.coodoo</groupId>
     <artifactId>coodoo-jpa-essentials</artifactId>
-    <version>1.1.1</version>
+    <version>1.2.0</version>
 </dependency>
 ```
 
