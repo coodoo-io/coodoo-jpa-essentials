@@ -2,13 +2,16 @@ package io.coodoo.framework.jpa.boundary.entity.dto;
 
 import java.time.LocalDateTime;
 
+import io.coodoo.framework.jpa.boundary.dto.AbstractIdCreatedUpdatedAtEntityDTO;
 import io.coodoo.framework.jpa.boundary.entity.RevisionDatesEntity;
 
 /**
  * Data transfer object (DTO) dedicated to {@link RevisionDatesEntity}
  * 
  * @author coodoo GmbH (coodoo.io)
+ * @deprecated use {@link AbstractIdCreatedUpdatedAtEntityDTO}
  */
+@Deprecated
 public class RevisionDatesEntityDTO extends BaseEntityDTO {
 
     public LocalDateTime createdAt;

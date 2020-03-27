@@ -57,7 +57,7 @@ public abstract class AbstractOccCreatedAtByEntity extends AbstractCreatedAtByEn
 
     @Version
     @Column(name = "version")
-    private Integer version = 0;
+    protected Integer version = 0;
 
     @Override
     public Integer getVersion() {

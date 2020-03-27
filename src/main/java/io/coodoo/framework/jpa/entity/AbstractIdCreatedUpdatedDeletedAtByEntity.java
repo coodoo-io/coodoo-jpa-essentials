@@ -91,7 +91,7 @@ public abstract class AbstractIdCreatedUpdatedDeletedAtByEntity extends Abstract
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    protected Long id;
 
     @Override
     public Long getId() {

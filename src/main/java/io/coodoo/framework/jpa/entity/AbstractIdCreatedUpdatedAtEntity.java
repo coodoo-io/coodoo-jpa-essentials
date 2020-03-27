@@ -61,7 +61,7 @@ public abstract class AbstractIdCreatedUpdatedAtEntity extends AbstractCreatedUp
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    protected Long id;
 
     @Override
     public Long getId() {

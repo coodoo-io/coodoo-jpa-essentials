@@ -62,11 +62,11 @@ public abstract class AbstractIdOccCreatedAtEntity extends AbstractCreatedAtEnti
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    protected Long id;
 
     @Version
     @Column(name = "version")
-    private Integer version = 0;
+    protected Integer version = 0;
 
     @Override
     public Long getId() {

@@ -39,7 +39,7 @@ public abstract class AbstractOccEntity implements VersionAnnotated, Serializabl
 
     @Version
     @Column(name = "version")
-    private Integer version = 0;
+    protected Integer version = 0;
 
     @Override
     public Integer getVersion() {
