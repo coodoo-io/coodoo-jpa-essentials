@@ -4,13 +4,17 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.Version;
 
+import io.coodoo.framework.jpa.boundary.IdAnnotated;
 import io.coodoo.framework.jpa.boundary.RevisionUser;
-import io.coodoo.framework.jpa.boundary.UpdatedAt;
-import io.coodoo.framework.jpa.boundary.UpdatedBy;
+import io.coodoo.framework.jpa.boundary.VersionAnnotated;
 import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
 
 /**
@@ -25,6 +29,14 @@ import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
  * <th>Type</th>
  * <th>Column</th>
  * <th>Info</th>
+ * </tr>
+ * <tr>
+ * <td><b>ID</b></td>
+ * <td>{@link #id}</td>
+ * <td>{@link Long}</td>
+ * <td><code>id</code></td>
+ * <td>This {@link Id} annotated field uses the {@link GeneratedValue} strategy {@link GenerationType#IDENTITY}. It comes with {@link #hashCode()} and
+ * {@link #equals(Object)} methods based on the {@link #id} field</td>
  * </tr>
  * <tr>
  * <td><b>Creation Date</b></td>
@@ -54,6 +66,13 @@ import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
  * <td><code>updated_by</code></td>
  * <td>The user ID (if provided by an implementation of {@link RevisionUser}) is set the moment this entity is updated ({@link PreUpdate} callback)</td>
  * </tr>
+ * <tr>
+ * <td><b>OCC</b></td>
+ * <td>{@link #version}</td>
+ * <td>{@link Integer}</td>
+ * <td><code>version</code></td>
+ * <td>Optimistic concurrency control (OCC) is provided by {@link Version}</td>
+ * </tr>
  * </tbody>
  * </table>
  * 
@@ -61,38 +80,45 @@ import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractCreatedUpdatedAtByEntity extends AbstractCreatedAtByEntity implements UpdatedAt, UpdatedBy {
+public abstract class AbstractIdOccCreatedUpdatedAtByEntity extends AbstractCreatedUpdatedAtByEntity implements IdAnnotated, VersionAnnotated {
 
-    @Column(name = "updated_at")
-    protected LocalDateTime updatedAt;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-    @Column(name = "updated_by")
-    protected Long updatedBy;
+    @Version
+    @Column(name = "version")
+    private Integer version = 0;
 
     @Override
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public Long getId() {
+        return id;
     }
 
     @Override
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
-    public Long getUpdatedBy() {
-        return updatedBy;
+    public Integer getVersion() {
+        return version;
     }
 
     @Override
-    public void setUpdatedBy(Long updatedBy) {
-        this.updatedBy = updatedBy;
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("AbstractCreatedUpdatedAtByEntity [createdAt=");
+        builder.append("AbstractIdOccCreatedUpdatedAtByEntity [id=");
+        builder.append(id);
+        builder.append(", version=");
+        builder.append(version);
+        builder.append(", createdAt=");
         builder.append(createdAt);
         builder.append(", createdBy=");
         builder.append(createdBy);
@@ -102,6 +128,32 @@ public abstract class AbstractCreatedUpdatedAtByEntity extends AbstractCreatedAt
         builder.append(updatedBy);
         builder.append("]");
         return builder.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        if (getId() != null) {
+            return getId().hashCode();
+        } else {
+            return super.hashCode();
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || !(obj instanceof AbstractIdOccCreatedUpdatedAtByEntity)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        if (((AbstractIdOccCreatedUpdatedAtByEntity) obj).getId() == null) {
+            return false;
+        }
+        return ((AbstractIdOccCreatedUpdatedAtByEntity) obj).getId().equals(getId());
     }
 
 }

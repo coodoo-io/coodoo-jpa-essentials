@@ -4,15 +4,17 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
-import javax.persistence.EntityManager;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-import javax.persistence.Transient;
+import javax.persistence.Version;
 
-import io.coodoo.framework.jpa.boundary.DeletedAt;
-import io.coodoo.framework.jpa.boundary.DeletedBy;
+import io.coodoo.framework.jpa.boundary.IdAnnotated;
 import io.coodoo.framework.jpa.boundary.RevisionUser;
+import io.coodoo.framework.jpa.boundary.VersionAnnotated;
 import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
 
 /**
@@ -27,6 +29,14 @@ import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
  * <th>Type</th>
  * <th>Column</th>
  * <th>Info</th>
+ * </tr>
+ * <tr>
+ * <td><b>ID</b></td>
+ * <td>{@link #id}</td>
+ * <td>{@link Long}</td>
+ * <td><code>id</code></td>
+ * <td>This {@link Id} annotated field uses the {@link GeneratedValue} strategy {@link GenerationType#IDENTITY}. It comes with {@link #hashCode()} and
+ * {@link #equals(Object)} methods based on the {@link #id} field</td>
  * </tr>
  * <tr>
  * <td><b>Creation Date</b></td>
@@ -71,6 +81,13 @@ import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
  * <td>The user ID (if provided by an implementation of {@link RevisionUser}) is set to mark this entity as deleted ({@link PreUpdate} callback). You can mark
  * it by calling {@link #markAsDeleted()}</td>
  * </tr>
+ * <tr>
+ * <td><b>OCC</b></td>
+ * <td>{@link #version}</td>
+ * <td>{@link Integer}</td>
+ * <td><code>version</code></td>
+ * <td>Optimistic concurrency control (OCC) is provided by {@link Version}</td>
+ * </tr>
  * </tbody>
  * </table>
  * 
@@ -78,62 +95,45 @@ import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractCreatedUpdatedDeletedAtByEntity extends AbstractCreatedUpdatedAtByEntity implements DeletedAt, DeletedBy {
+public abstract class AbstractIdOccCreatedUpdatedDeletedAtByEntity extends AbstractCreatedUpdatedDeletedAtByEntity implements IdAnnotated, VersionAnnotated {
 
-    @Column(name = "deleted_at")
-    protected LocalDateTime deletedAt;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-    @Column(name = "deleted_by")
-    protected Long deletedBy;
-
-    // FIXME prüfen ob das überhaupt per @PrePersist greift und wenn nicht, dann ggf, das @Transient entfernen und einen anderen weg finden...
-    @Transient
-    private boolean markedAsDeleted = false;
+    @Version
+    @Column(name = "version")
+    private Integer version = 0;
 
     @Override
-    public LocalDateTime getDeletedAt() {
-        return deletedAt;
+    public Long getId() {
+        return id;
     }
 
     @Override
-    public void setDeletedAt(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
-    public Long getDeletedBy() {
-        return deletedBy;
+    public Integer getVersion() {
+        return version;
     }
 
     @Override
-    public void setDeletedBy(Long deletedBy) {
-        this.deletedBy = deletedBy;
-    }
-
-    /**
-     * To just mark an entity as deleted, call this method instead of {@link EntityManager#remove(Object)}. The fields {@link #deletedAt} and {@link #deletedBy}
-     * will be set to mark the deletion. <br>
-     * On the other hand you have to provide your queries with something like '<code>deleted_at IS NULL</code>' to avoid 'marked as deleted' entries! for those
-     * fields if <code>null</code>.
-     */
-    @Override
-    public void markAsDeleted() {
-        markedAsDeleted = true;
-    }
-
-    /**
-     * @return <code>true</code> if this entity pretends to be deleted. If <code>false</code> you can doom it by calling {@link #markAsDeleted()}. <br>
-     *         You can check {@link #deletedAt} for when it was marked as deleted and {@link #deletedBy} for who did it.
-     */
-    @Override
-    public boolean isMarkedAsDeleted() {
-        return markedAsDeleted || deletedAt != null;
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("AbstractCreatedUpdatedDeletedAtByEntity [createdAt=");
+        builder.append("AbstractIdOccCreatedUpdatedDeletedAtByEntity [id=");
+        builder.append(id);
+        builder.append(", version=");
+        builder.append(version);
+        builder.append(", createdAt=");
         builder.append(createdAt);
         builder.append(", createdBy=");
         builder.append(createdBy);
@@ -145,10 +145,34 @@ public abstract class AbstractCreatedUpdatedDeletedAtByEntity extends AbstractCr
         builder.append(deletedAt);
         builder.append(", deletedBy=");
         builder.append(deletedBy);
-        builder.append(", markedAsDeleted=");
-        builder.append(markedAsDeleted);
         builder.append("]");
         return builder.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        if (getId() != null) {
+            return getId().hashCode();
+        } else {
+            return super.hashCode();
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || !(obj instanceof AbstractIdOccCreatedUpdatedDeletedAtByEntity)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        if (((AbstractIdOccCreatedUpdatedDeletedAtByEntity) obj).getId() == null) {
+            return false;
+        }
+        return ((AbstractIdOccCreatedUpdatedDeletedAtByEntity) obj).getId().equals(getId());
     }
 
 }

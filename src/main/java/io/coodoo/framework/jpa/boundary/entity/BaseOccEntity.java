@@ -4,6 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
+import io.coodoo.framework.jpa.boundary.VersionAnnotated;
+import io.coodoo.framework.jpa.entity.AbstractIdOccEntity;
+
 /**
  * Base identification entity with optimistic concurrency control version number
  * 
@@ -34,10 +37,12 @@ import javax.persistence.Version;
  * </table>
  * 
  * @author coodoo GmbH (coodoo.io)
+ * @deprecated use {@link AbstractIdOccEntity}
  */
+@Deprecated
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class BaseOccEntity extends BaseEntity {
+public abstract class BaseOccEntity extends BaseEntity implements VersionAnnotated {
 
     @Version
     @Column(name = "version")

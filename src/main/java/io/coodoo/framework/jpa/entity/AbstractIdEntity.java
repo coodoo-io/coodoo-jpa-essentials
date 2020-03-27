@@ -1,4 +1,4 @@
-package io.coodoo.framework.jpa.boundary.entity;
+package io.coodoo.framework.jpa.entity;
 
 import java.io.Serializable;
 
@@ -9,55 +9,59 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import io.coodoo.framework.jpa.boundary.IdAnnotated;
-import io.coodoo.framework.jpa.entity.AbstractIdEntity;
 
 /**
- * Base identification entity <br>
+ * This {@link MappedSuperclass} is {@link Serializable}<br>
  * <br>
  * 
  * <table border="1" summary="Fields">
+ * <tbody>
  * <tr>
- * <th>Fields</th>
- * <th>ID</th>
+ * <th></th>
+ * <th>Field</th>
+ * <th>Type</th>
+ * <th>Column</th>
+ * <th>Info</th>
  * </tr>
  * <tr>
- * <td>Name</td>
- * <td>id</td>
+ * <td><b>ID</b></td>
+ * <td>{@link #id}</td>
+ * <td>{@link Long}</td>
+ * <td><code>id</code></td>
+ * <td>This {@link Id} annotated field uses the {@link GeneratedValue} strategy {@link GenerationType#IDENTITY}. It comes with {@link #hashCode()} and
+ * {@link #equals(Object)} methods based on the {@link #id} field</td>
  * </tr>
- * <tr>
- * <td>Type</td>
- * <td>Long</td>
- * </tr>
- * <tr>
- * <td>Column name</td>
- * <td>id</td>
- * </tr>
+ * </tbody>
  * </table>
  * 
  * @author coodoo GmbH (coodoo.io)
- * @deprecated use {@link AbstractIdEntity}
  */
-@Deprecated
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class BaseEntity implements IdAnnotated, Serializable {
+public abstract class AbstractIdEntity implements IdAnnotated, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    protected Long id;
+    private Long id;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    @Override
     public Long getId() {
         return id;
     }
 
     @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
     public String toString() {
-        return "id=" + id;
+        StringBuilder builder = new StringBuilder();
+        builder.append("AbstractIdEntity [id=");
+        builder.append(id);
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override
@@ -74,18 +78,16 @@ public abstract class BaseEntity implements IdAnnotated, Serializable {
         if (this == obj) {
             return true;
         }
-        if (obj == null || !(obj instanceof BaseEntity)) {
+        if (obj == null || !(obj instanceof AbstractIdEntity)) {
             return false;
         }
-
         if (getClass() != obj.getClass()) {
             return false;
         }
-
-        if (((BaseEntity) obj).getId() == null) {
+        if (((AbstractIdEntity) obj).getId() == null) {
             return false;
         }
-        return ((BaseEntity) obj).getId().equals(getId());
+        return ((AbstractIdEntity) obj).getId().equals(getId());
     }
 
 }

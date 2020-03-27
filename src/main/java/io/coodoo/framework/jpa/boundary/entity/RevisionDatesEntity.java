@@ -7,8 +7,9 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 
 import io.coodoo.framework.jpa.boundary.CreatedAt;
-import io.coodoo.framework.jpa.boundary.JpaEssentialsEntityListener;
 import io.coodoo.framework.jpa.boundary.UpdatedAt;
+import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
+import io.coodoo.framework.jpa.entity.AbstractIdCreatedUpdatedAtEntity;
 
 /**
  * Base entity providing identification and automatically sets creation/update timestamps
@@ -44,7 +45,9 @@ import io.coodoo.framework.jpa.boundary.UpdatedAt;
  * </table>
  * 
  * @author coodoo GmbH (coodoo.io)
+ * @deprecated use {@link AbstractIdCreatedUpdatedAtEntity}
  */
+@Deprecated
 @SuppressWarnings("serial")
 @MappedSuperclass
 @EntityListeners(JpaEssentialsEntityListener.class)

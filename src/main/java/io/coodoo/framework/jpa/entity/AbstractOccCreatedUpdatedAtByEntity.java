@@ -7,10 +7,10 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.Version;
 
 import io.coodoo.framework.jpa.boundary.RevisionUser;
-import io.coodoo.framework.jpa.boundary.UpdatedAt;
-import io.coodoo.framework.jpa.boundary.UpdatedBy;
+import io.coodoo.framework.jpa.boundary.VersionAnnotated;
 import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
 
 /**
@@ -54,6 +54,13 @@ import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
  * <td><code>updated_by</code></td>
  * <td>The user ID (if provided by an implementation of {@link RevisionUser}) is set the moment this entity is updated ({@link PreUpdate} callback)</td>
  * </tr>
+ * <tr>
+ * <td><b>OCC</b></td>
+ * <td>{@link #version}</td>
+ * <td>{@link Integer}</td>
+ * <td><code>version</code></td>
+ * <td>Optimistic concurrency control (OCC) is provided by {@link Version}</td>
+ * </tr>
  * </tbody>
  * </table>
  * 
@@ -61,38 +68,28 @@ import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractCreatedUpdatedAtByEntity extends AbstractCreatedAtByEntity implements UpdatedAt, UpdatedBy {
+public abstract class AbstractOccCreatedUpdatedAtByEntity extends AbstractCreatedUpdatedAtByEntity implements VersionAnnotated {
 
-    @Column(name = "updated_at")
-    protected LocalDateTime updatedAt;
-
-    @Column(name = "updated_by")
-    protected Long updatedBy;
+    @Version
+    @Column(name = "version")
+    private Integer version = 0;
 
     @Override
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public Integer getVersion() {
+        return version;
     }
 
     @Override
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    @Override
-    public Long getUpdatedBy() {
-        return updatedBy;
-    }
-
-    @Override
-    public void setUpdatedBy(Long updatedBy) {
-        this.updatedBy = updatedBy;
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("AbstractCreatedUpdatedAtByEntity [createdAt=");
+        builder.append("AbstractOccCreatedUpdatedAtByEntity [version=");
+        builder.append(version);
+        builder.append(", createdAt=");
         builder.append(createdAt);
         builder.append(", createdBy=");
         builder.append(createdBy);

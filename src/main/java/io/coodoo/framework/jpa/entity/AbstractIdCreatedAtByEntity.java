@@ -4,13 +4,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 
+import io.coodoo.framework.jpa.boundary.IdAnnotated;
 import io.coodoo.framework.jpa.boundary.RevisionUser;
-import io.coodoo.framework.jpa.boundary.UpdatedAt;
-import io.coodoo.framework.jpa.boundary.UpdatedBy;
 import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
 
 /**
@@ -27,6 +28,14 @@ import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
  * <th>Info</th>
  * </tr>
  * <tr>
+ * <td><b>ID</b></td>
+ * <td>{@link #id}</td>
+ * <td>{@link Long}</td>
+ * <td><code>id</code></td>
+ * <td>This {@link Id} annotated field uses the {@link GeneratedValue} strategy {@link GenerationType#IDENTITY}. It comes with {@link #hashCode()} and
+ * {@link #equals(Object)} methods based on the {@link #id} field</td>
+ * </tr>
+ * <tr>
  * <td><b>Creation Date</b></td>
  * <td>{@link #createdAt}</td>
  * <td>{@link LocalDateTime}</td>
@@ -40,20 +49,6 @@ import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
  * <td><code>created_by</code></td>
  * <td>The user ID (if provided by an implementation of {@link RevisionUser}) is set the moment this entity is persisted ({@link PrePersist} callback)</td>
  * </tr>
- * <tr>
- * <td><b>Update Date</b></td>
- * <td>{@link #updatedAt}</td>
- * <td>{@link LocalDateTime}</td>
- * <td><code>updated_at</code></td>
- * <td>The current time is set the moment this entity is updated ({@link PreUpdate} callback)</td>
- * </tr>
- * <tr>
- * <td><b>Update User</b></td>
- * <td>{@link #updatedBy}</td>
- * <td>{@link Long}</td>
- * <td><code>updated_by</code></td>
- * <td>The user ID (if provided by an implementation of {@link RevisionUser}) is set the moment this entity is updated ({@link PreUpdate} callback)</td>
- * </tr>
  * </tbody>
  * </table>
  * 
@@ -61,47 +56,60 @@ import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractCreatedUpdatedAtByEntity extends AbstractCreatedAtByEntity implements UpdatedAt, UpdatedBy {
+public abstract class AbstractIdCreatedAtByEntity extends AbstractCreatedAtByEntity implements IdAnnotated {
 
-    @Column(name = "updated_at")
-    protected LocalDateTime updatedAt;
-
-    @Column(name = "updated_by")
-    protected Long updatedBy;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     @Override
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public Long getId() {
+        return id;
     }
 
     @Override
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    @Override
-    public Long getUpdatedBy() {
-        return updatedBy;
-    }
-
-    @Override
-    public void setUpdatedBy(Long updatedBy) {
-        this.updatedBy = updatedBy;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("AbstractCreatedUpdatedAtByEntity [createdAt=");
+        builder.append("AbstractIdCreatedAtByEntity [id=");
+        builder.append(id);
+        builder.append(", createdAt=");
         builder.append(createdAt);
         builder.append(", createdBy=");
         builder.append(createdBy);
-        builder.append(", updatedAt=");
-        builder.append(updatedAt);
-        builder.append(", updatedBy=");
-        builder.append(updatedBy);
         builder.append("]");
         return builder.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        if (getId() != null) {
+            return getId().hashCode();
+        } else {
+            return super.hashCode();
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || !(obj instanceof AbstractIdCreatedAtByEntity)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        if (((AbstractIdCreatedAtByEntity) obj).getId() == null) {
+            return false;
+        }
+        return ((AbstractIdCreatedAtByEntity) obj).getId().equals(getId());
     }
 
 }

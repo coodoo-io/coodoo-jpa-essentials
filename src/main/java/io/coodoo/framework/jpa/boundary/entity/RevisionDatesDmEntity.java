@@ -8,6 +8,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 import io.coodoo.framework.jpa.boundary.DeletedAt;
+import io.coodoo.framework.jpa.entity.AbstractIdCreatedUpdatedDeletedAtEntity;
 
 /**
  * Base entity providing identification and automatically sets creation/update/deletion timestamps
@@ -47,7 +48,9 @@ import io.coodoo.framework.jpa.boundary.DeletedAt;
  * </table>
  * 
  * @author coodoo GmbH (coodoo.io)
+ * @deprecated use {@link AbstractIdCreatedUpdatedDeletedAtEntity}
  */
+@Deprecated
 @SuppressWarnings("serial")
 @MappedSuperclass
 public abstract class RevisionDatesDmEntity extends RevisionDatesEntity implements DeletedAt {

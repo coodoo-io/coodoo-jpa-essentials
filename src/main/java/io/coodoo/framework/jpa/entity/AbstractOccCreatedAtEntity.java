@@ -6,12 +6,13 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
+import javax.persistence.Version;
 
-import io.coodoo.framework.jpa.boundary.CreatedAt;
+import io.coodoo.framework.jpa.boundary.VersionAnnotated;
 import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
 
 /**
- * This {@link MappedSuperclass} is {@link Serializable}, attached to the {@link JpaEssentialsEntityListener} and provides the field in this table:<br>
+ * This {@link MappedSuperclass} is {@link Serializable}, attached to the {@link JpaEssentialsEntityListener} and provides the fields in this table:<br>
  * <br>
  * 
  * <table border="1" summary="Fields">
@@ -24,12 +25,18 @@ import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
  * <th>Info</th>
  * </tr>
  * <tr>
- * <tr>
  * <td><b>Creation Date</b></td>
  * <td>{@link #createdAt}</td>
  * <td>{@link LocalDateTime}</td>
  * <td><code>created_at</code></td>
  * <td>The current time is set the moment this entity is persisted ({@link PrePersist} callback)</td>
+ * </tr>
+ * <tr>
+ * <td><b>OCC</b></td>
+ * <td>{@link #version}</td>
+ * <td>{@link Integer}</td>
+ * <td><code>version</code></td>
+ * <td>Optimistic concurrency control (OCC) is provided by {@link Version}</td>
  * </tr>
  * </tbody>
  * </table>
@@ -38,25 +45,28 @@ import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractCreatedAtEntity implements CreatedAt, Serializable {
+public abstract class AbstractOccCreatedAtEntity extends AbstractCreatedAtEntity implements VersionAnnotated {
 
-    @Column(name = "created_at", nullable = false)
-    protected LocalDateTime createdAt;
+    @Version
+    @Column(name = "version")
+    private Integer version = 0;
 
     @Override
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public Integer getVersion() {
+        return version;
     }
 
     @Override
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("AbstractCreatedAtEntity [createdAt=");
+        builder.append("AbstractOccCreatedAtEntity [version=");
+        builder.append(version);
+        builder.append(", createdAt=");
         builder.append(createdAt);
         builder.append("]");
         return builder.toString();

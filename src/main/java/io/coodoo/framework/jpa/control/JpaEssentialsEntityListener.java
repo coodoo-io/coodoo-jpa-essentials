@@ -1,4 +1,4 @@
-package io.coodoo.framework.jpa.boundary;
+package io.coodoo.framework.jpa.control;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -8,7 +8,13 @@ import javax.inject.Inject;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
-import io.coodoo.framework.jpa.control.JpaEssentialsConfig;
+import io.coodoo.framework.jpa.boundary.CreatedAt;
+import io.coodoo.framework.jpa.boundary.CreatedBy;
+import io.coodoo.framework.jpa.boundary.DeletedAt;
+import io.coodoo.framework.jpa.boundary.DeletedBy;
+import io.coodoo.framework.jpa.boundary.RevisionUser;
+import io.coodoo.framework.jpa.boundary.UpdatedAt;
+import io.coodoo.framework.jpa.boundary.UpdatedBy;
 
 /**
  * Intercepts JPA events to set revision information

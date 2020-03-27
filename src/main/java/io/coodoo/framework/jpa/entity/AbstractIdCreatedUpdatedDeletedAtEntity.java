@@ -4,13 +4,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
-import javax.persistence.EntityManager;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-import javax.persistence.Transient;
 
-import io.coodoo.framework.jpa.boundary.DeletedAt;
+import io.coodoo.framework.jpa.boundary.IdAnnotated;
 import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
 
 /**
@@ -25,6 +26,14 @@ import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
  * <th>Type</th>
  * <th>Column</th>
  * <th>Info</th>
+ * </tr>
+ * <tr>
+ * <td><b>ID</b></td>
+ * <td>{@link #id}</td>
+ * <td>{@link Long}</td>
+ * <td><code>id</code></td>
+ * <td>This {@link Id} annotated field uses the {@link GeneratedValue} strategy {@link GenerationType#IDENTITY}. It comes with {@link #hashCode()} and
+ * {@link #equals(Object)} methods based on the {@link #id} field</td>
  * </tr>
  * <tr>
  * <td><b>Creation Date</b></td>
@@ -54,58 +63,62 @@ import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractCreatedUpdatedDeletedAtEntity extends AbstractCreatedUpdatedAtEntity implements DeletedAt {
+public abstract class AbstractIdCreatedUpdatedDeletedAtEntity extends AbstractCreatedUpdatedDeletedAtEntity implements IdAnnotated {
 
-    @Column(name = "deleted_at")
-    protected LocalDateTime deletedAt;
-
-    // FIXME prüfen ob das überhaupt per @PrePersist greift und wenn nicht, dann ggf, das @Transient entfernen und einen anderen weg finden...
-    @Transient
-    private boolean markedAsDeleted = false;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     @Override
-    public LocalDateTime getDeletedAt() {
-        return deletedAt;
+    public Long getId() {
+        return id;
     }
 
     @Override
-    public void setDeletedAt(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
-    /**
-     * To just mark an entity as deleted, call this method instead of {@link EntityManager#remove(Object)}. The fields {@link #deletedAt} and {@link #deletedBy}
-     * will be set to mark the deletion. <br>
-     * On the other hand you have to provide your queries with something like '<code>deleted_at IS NULL</code>' to avoid 'marked as deleted' entries! for those
-     * fields if <code>null</code>.
-     */
-    @Override
-    public void markAsDeleted() {
-        markedAsDeleted = true;
-    }
-
-    /**
-     * @return <code>true</code> if this entity pretends to be deleted. If <code>false</code> you can doom it by calling {@link #markAsDeleted()}. <br>
-     *         You can check {@link #deletedAt} for when it was marked as deleted and {@link #deletedBy} for who did it.
-     */
-    @Override
-    public boolean isMarkedAsDeleted() {
-        return markedAsDeleted || deletedAt != null;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("AbstractCreatedUpdatedDeletedAtEntity [createdAt=");
+        builder.append("AbstractIdCreatedUpdatedDeletedAtEntity [id=");
+        builder.append(id);
+        builder.append(", createdAt=");
         builder.append(createdAt);
         builder.append(", updatedAt=");
         builder.append(updatedAt);
         builder.append(", deletedAt=");
         builder.append(deletedAt);
-        builder.append(", markedAsDeleted=");
-        builder.append(markedAsDeleted);
         builder.append("]");
         return builder.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        if (getId() != null) {
+            return getId().hashCode();
+        } else {
+            return super.hashCode();
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || !(obj instanceof AbstractIdCreatedUpdatedDeletedAtEntity)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        if (((AbstractIdCreatedUpdatedDeletedAtEntity) obj).getId() == null) {
+            return false;
+        }
+        return ((AbstractIdCreatedUpdatedDeletedAtEntity) obj).getId().equals(getId());
     }
 
 }

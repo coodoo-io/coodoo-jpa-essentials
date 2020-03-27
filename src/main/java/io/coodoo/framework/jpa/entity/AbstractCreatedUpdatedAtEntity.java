@@ -8,8 +8,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
-import io.coodoo.framework.jpa.boundary.JpaEssentialsEntityListener;
 import io.coodoo.framework.jpa.boundary.UpdatedAt;
+import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
 
 /**
  * This {@link MappedSuperclass} is {@link Serializable}, attached to the {@link JpaEssentialsEntityListener} and provides the fields in this table:<br>

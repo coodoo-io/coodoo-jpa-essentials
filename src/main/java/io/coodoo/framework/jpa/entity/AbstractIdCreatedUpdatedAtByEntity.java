@@ -4,18 +4,16 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
-import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-import javax.persistence.Transient;
-import javax.persistence.Version;
 
-import io.coodoo.framework.jpa.boundary.JpaEssentialsEntityListener;
+import io.coodoo.framework.jpa.boundary.IdAnnotated;
 import io.coodoo.framework.jpa.boundary.RevisionUser;
+import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
 
 /**
  * This {@link MappedSuperclass} is {@link Serializable}, attached to the {@link JpaEssentialsEntityListener} and provides the fields in this table:<br>
@@ -66,28 +64,6 @@ import io.coodoo.framework.jpa.boundary.RevisionUser;
  * <td><code>updated_by</code></td>
  * <td>The user ID (if provided by an implementation of {@link RevisionUser}) is set the moment this entity is updated ({@link PreUpdate} callback)</td>
  * </tr>
- * <tr>
- * <td><b>Deletion Date</b></td>
- * <td>{@link #deletedAt}</td>
- * <td>{@link LocalDateTime}</td>
- * <td><code>deleted_at</code></td>
- * <td>The current time is set to mark this entity as deleted ({@link PreUpdate} callback). You can mark it by calling {@link #markAsDeleted()}</td>
- * </tr>
- * <tr>
- * <td><b>Deletion User</b></td>
- * <td>{@link #deletedBy}</td>
- * <td>{@link Long}</td>
- * <td><code>deleted_by</code></td>
- * <td>The user ID (if provided by an implementation of {@link RevisionUser}) is set to mark this entity as deleted ({@link PreUpdate} callback). You can mark
- * it by calling {@link #markAsDeleted()}</td>
- * </tr>
- * <tr>
- * <td><b>OCC</b></td>
- * <td>{@link #version}</td>
- * <td>{@link Integer}</td>
- * <td><code>version</code></td>
- * <td>Optimistic concurrency control (OCC) is provided by {@link Version}</td>
- * </tr>
  * </tbody>
  * </table>
  * 
@@ -95,65 +71,27 @@ import io.coodoo.framework.jpa.boundary.RevisionUser;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class BaseEntity implements Serializable {
+public abstract class AbstractIdCreatedUpdatedAtByEntity extends AbstractCreatedUpdatedAtByEntity implements IdAnnotated {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    protected Long id;
+    private Long id;
 
-    @Column(name = "created_at", nullable = false)
-    protected LocalDateTime createdAt;
-
-    @Column(name = "created_by")
-    protected Long createdBy;
-
-    @Column(name = "updated_at")
-    protected LocalDateTime updatedAt;
-
-    @Column(name = "updated_by")
-    protected Long updatedBy;
-
-    @Column(name = "deleted_at")
-    protected LocalDateTime deletedAt;
-
-    @Column(name = "deleted_by")
-    protected Long deletedBy;
-
-    @Version
-    @Column(name = "version")
-    protected Integer version = 0;
-
-    // FIXME prüfen ob das überhaupt per @PrePersist greift und wenn nicht, dann ggf, das @Transient entfernen und einen anderen weg finden...
-    @Transient
-    private boolean markedAsDeleted = false;
-
-    /**
-     * To just mark an entity as deleted, call this method instead of {@link EntityManager#remove(Object)}. The fields {@link #deletedAt} and {@link #deletedBy}
-     * will be set to mark the deletion. <br>
-     * On the other hand you have to provide your queries with something like '<code>deleted_at IS NULL</code>' to avoid 'marked as deleted' entries! for those
-     * fields if <code>null</code>.
-     */
-    public void markAsDeleted() {
-        markedAsDeleted = true;
-    }
-
-    /**
-     * @return <code>true</code> if this entity pretends to be deleted. If <code>false</code> you can doom it by calling {@link #markAsDeleted()}. <br>
-     *         You can check {@link #deletedAt} for when it was marked as deleted and {@link #deletedBy} for who did it.
-     */
-    public boolean isMarkedAsDeleted() {
-        return markedAsDeleted || deletedAt != null;
-    }
-
+    @Override
     public Long getId() {
         return id;
     }
 
     @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("BaseEntity [id=");
+        builder.append("AbstractIdCreatedUpdatedAtByEntity [id=");
         builder.append(id);
         builder.append(", createdAt=");
         builder.append(createdAt);
@@ -163,12 +101,6 @@ public abstract class BaseEntity implements Serializable {
         builder.append(updatedAt);
         builder.append(", updatedBy=");
         builder.append(updatedBy);
-        builder.append(", deletedAt=");
-        builder.append(deletedAt);
-        builder.append(", deletedBy=");
-        builder.append(deletedBy);
-        builder.append(", version=");
-        builder.append(version);
         builder.append("]");
         return builder.toString();
     }
@@ -187,16 +119,16 @@ public abstract class BaseEntity implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (obj == null || !(obj instanceof BaseEntity)) {
+        if (obj == null || !(obj instanceof AbstractIdCreatedUpdatedAtByEntity)) {
             return false;
         }
         if (getClass() != obj.getClass()) {
             return false;
         }
-        if (((BaseEntity) obj).getId() == null) {
+        if (((AbstractIdCreatedUpdatedAtByEntity) obj).getId() == null) {
             return false;
         }
-        return ((BaseEntity) obj).getId().equals(getId());
+        return ((AbstractIdCreatedUpdatedAtByEntity) obj).getId().equals(getId());
     }
 
 }
