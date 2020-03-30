@@ -74,7 +74,6 @@ public abstract class RevisionDmEntity extends RevisionEntity implements Deleted
     @Column(name = "deleted_by")
     protected Long deletedBy;
 
-    // FIXME prüfen ob das überhaupt per @PrePersist greift und wenn nicht, dann ggf, das @Transient entfernen und einen anderen weg finden...
     @Transient
     private boolean markedAsDeleted = false;
 

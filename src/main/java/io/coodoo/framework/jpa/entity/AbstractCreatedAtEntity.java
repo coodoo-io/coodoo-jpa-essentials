@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 
@@ -38,6 +39,7 @@ import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
+@EntityListeners(JpaEssentialsEntityListener.class)
 public abstract class AbstractCreatedAtEntity implements CreatedAt, Serializable {
 
     @Column(name = "created_at", nullable = false)

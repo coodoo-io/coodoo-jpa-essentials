@@ -16,7 +16,7 @@
 ## Background
 
 Every JPA entity needs an identifier and most of the time it is an auto increment number. Also in many cases you want to have the basic revision information stored for every entry.
-Instead of always writing the same stuff you could just take this fields and functionality from abstract super classes. Enough said.
+Instead of writing the same stuff over and over again you could just take this fields and functionality from abstract super classes. Enough said.
 
 
 ## Install
@@ -36,10 +36,10 @@ Add the following dependency to your project ([published on Maven Central](http:
 Following example will not only provide you an `@Id` annotated field, but also the revision field that will store the timestamps of creations and updates:
 
 ```java
-import io.coodoo.framework.jpa.boundary.entity.RevisionDatesEntity;
+import io.coodoo.framework.jpa.entity.AbstractIdCreatedUpdatedAtEntity;
 
 @Entity
-public class SomeEntity extends RevisionDatesEntity {
+public class SomeEntity extends AbstractIdCreatedUpdatedAtEntity {
 
     @Column
     private String something;
@@ -58,18 +58,18 @@ All entities are annotated by the `@MappedSuperclass`, so all you need is to ext
 
 ### Identification entity
 
-Since it is the most used identifier the root identification entity `BaseEntity` comes with an auto incremental `Long` named `id`.
+Since it is the most used identifier all entities with `Id` in the name come with an auto incremental `Long` named `id`.
+This id annotated field uses the GeneratedValue strategy IDENTITY. It comes with `hashCode()` and `equals(Object)` methods based on the id field.
+
 
 ### Optimistic concurrency control 
 
-Every entity is inherited by an OCC entity `*OccEntity` that comes with an `@Version` annotated `Integer` named `version` as optimistic concurrency control value.
+Every entity with `Occ` in the name comes with an `@Version` annotated `Integer` named `version` as optimistic concurrency control value.
+
 
 ### Revision entities
 
-All revision entities are using the `RevisionDatesEntity` super class. So they all come at least with `id`, `createdAt` and `updatedAt` field and if they are named something like "Occ", also the `version` field.
-
-You can basically distinguish the revision option in create/update timestamps, paired with the responsible user and "marked as deleted" flags.
-
+Entities with `At` in the name provide timestamp fields `createdAt`, `updatedAt` or `deletedAt` that will get updated automatically when the entity is created, updatedAt or deleted. Same game for entities with `By` in the name, they will add an user ID.
 
 To provide the user ID (currently only type `Long` by the same reasons like the identifier) you have to implement the interface `RevisionUser` where ever you get your current users ID from.
 

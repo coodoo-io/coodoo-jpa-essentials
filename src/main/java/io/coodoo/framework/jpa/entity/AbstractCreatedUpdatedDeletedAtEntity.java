@@ -59,7 +59,6 @@ public abstract class AbstractCreatedUpdatedDeletedAtEntity extends AbstractCrea
     @Column(name = "deleted_at")
     protected LocalDateTime deletedAt;
 
-    // FIXME prüfen ob das überhaupt per @PrePersist greift und wenn nicht, dann ggf, das @Transient entfernen und einen anderen weg finden...
     @Transient
     private boolean markedAsDeleted = false;
 
