@@ -1,8 +1,5 @@
 package io.coodoo.framework.jpa.control;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.persistence.PrePersist;
@@ -29,7 +26,7 @@ public class JpaEssentialsEntityListener {
     @PrePersist
     public void create(CreatedAt entity) {
 
-        entity.setCreatedAt(now());
+        entity.setCreatedAt(JpaEssentialsConfig.now());
 
         if (entity instanceof CreatedBy) {
             ((CreatedBy) entity).setCreatedBy(getUserId());
@@ -42,20 +39,22 @@ public class JpaEssentialsEntityListener {
     @PreUpdate
     public void update(UpdatedAt entity) {
 
-        entity.setUpdatedAt(now());
-
-        if (entity instanceof UpdatedBy) {
-            ((UpdatedBy) entity).setUpdatedBy(getUserId());
-        }
-        if (entity instanceof DeletedAt && ((DeletedAt) entity).isMarkedAsDeleted()) {
+        if (entity instanceof DeletedAt && ((DeletedAt) entity).markedAsDeleted()) {
 
             DeletedAt deletedAtEntity = ((DeletedAt) entity);
 
-            if (deletedAtEntity.getDeletedAt() == null) {
-                deletedAtEntity.setDeletedAt(now());
-            }
+            // the date should already be set, but who knows if it is correct...
+            deletedAtEntity.setDeletedAt(JpaEssentialsConfig.now());
+
             if (deletedAtEntity instanceof DeletedBy && ((DeletedBy) deletedAtEntity).getDeletedBy() == null) {
                 ((DeletedBy) deletedAtEntity).setDeletedBy(getUserId());
+            }
+        } else {
+
+            entity.setUpdatedAt(JpaEssentialsConfig.now());
+
+            if (entity instanceof UpdatedBy) {
+                ((UpdatedBy) entity).setUpdatedBy(getUserId());
             }
         }
     }
@@ -63,10 +62,6 @@ public class JpaEssentialsEntityListener {
     public Long getUserId() {
         RevisionUser revisionUser = revisionUserInstance.get();
         return revisionUser.getUserId();
-    }
-
-    public LocalDateTime now() {
-        return LocalDateTime.now(ZoneId.of(JpaEssentialsConfig.LOCAL_DATE_TIME_ZONE));
     }
 
 }

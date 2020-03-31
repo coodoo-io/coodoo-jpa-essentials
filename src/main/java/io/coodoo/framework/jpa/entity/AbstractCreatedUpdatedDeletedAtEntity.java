@@ -8,13 +8,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-import javax.persistence.Transient;
 
 import io.coodoo.framework.jpa.boundary.DeletedAt;
+import io.coodoo.framework.jpa.boundary.dto.AbstractCreatedUpdatedAtEntityDTO;
+import io.coodoo.framework.jpa.boundary.dto.AbstractCreatedUpdatedDeletedAtEntityDTO;
+import io.coodoo.framework.jpa.control.JpaEssentialsConfig;
 import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
 
 /**
  * This {@link MappedSuperclass} is {@link Serializable}, attached to the {@link JpaEssentialsEntityListener} and provides the fields in this table:<br>
+ * <br>
+ * You can use {@link AbstractCreatedUpdatedAtEntityDTO} instead of {@link AbstractCreatedUpdatedDeletedAtEntityDTO} to hide the {@link #deletedAt} field. <br>
  * <br>
  * 
  * <table border="1" summary="Fields">
@@ -59,9 +63,6 @@ public abstract class AbstractCreatedUpdatedDeletedAtEntity extends AbstractCrea
     @Column(name = "deleted_at")
     protected LocalDateTime deletedAt;
 
-    @Transient
-    private boolean markedAsDeleted = false;
-
     @Override
     public LocalDateTime getDeletedAt() {
         return deletedAt;
@@ -80,7 +81,7 @@ public abstract class AbstractCreatedUpdatedDeletedAtEntity extends AbstractCrea
      */
     @Override
     public void markAsDeleted() {
-        markedAsDeleted = true;
+        this.deletedAt = JpaEssentialsConfig.now();
     }
 
     /**
@@ -88,8 +89,8 @@ public abstract class AbstractCreatedUpdatedDeletedAtEntity extends AbstractCrea
      *         You can check {@link #deletedAt} for when it was marked as deleted and {@link #deletedBy} for who did it.
      */
     @Override
-    public boolean isMarkedAsDeleted() {
-        return markedAsDeleted || deletedAt != null;
+    public boolean markedAsDeleted() {
+        return deletedAt != null;
     }
 
     @Override
@@ -101,8 +102,6 @@ public abstract class AbstractCreatedUpdatedDeletedAtEntity extends AbstractCrea
         builder.append(updatedAt);
         builder.append(", deletedAt=");
         builder.append(deletedAt);
-        builder.append(", markedAsDeleted=");
-        builder.append(markedAsDeleted);
         builder.append("]");
         return builder.toString();
     }

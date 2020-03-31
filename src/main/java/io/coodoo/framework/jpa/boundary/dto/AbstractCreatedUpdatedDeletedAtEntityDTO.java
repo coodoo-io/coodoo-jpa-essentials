@@ -5,7 +5,8 @@ import java.time.LocalDateTime;
 import io.coodoo.framework.jpa.entity.AbstractCreatedUpdatedDeletedAtEntity;
 
 /**
- * Data transfer object (DTO) dedicated to {@link AbstractCreatedUpdatedDeletedAtEntity}
+ * Data transfer object (DTO) dedicated to {@link AbstractCreatedUpdatedDeletedAtEntity} <br>
+ * <strong>To hide the <code>deletedAt</code> field use {@link AbstractCreatedUpdatedAtEntityDTO}</strong>
  * 
  * @author coodoo GmbH (coodoo.io)
  */

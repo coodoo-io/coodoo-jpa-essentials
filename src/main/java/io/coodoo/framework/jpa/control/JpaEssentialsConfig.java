@@ -2,6 +2,8 @@ package io.coodoo.framework.jpa.control;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Properties;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -38,6 +40,10 @@ public class JpaEssentialsConfig {
     private static final String jpaEssentialsPropertiesFilename = "coodoo.jpa-essentials.properties";
 
     static Properties properties = new Properties();
+
+    public static LocalDateTime now() {
+        return LocalDateTime.now(ZoneId.of(LOCAL_DATE_TIME_ZONE));
+    }
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) {
         loadProperties();

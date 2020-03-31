@@ -3,7 +3,8 @@ package io.coodoo.framework.jpa.boundary.dto;
 import io.coodoo.framework.jpa.entity.AbstractOccCreatedUpdatedDeletedAtEntity;
 
 /**
- * Data transfer object (DTO) dedicated to {@link AbstractOccCreatedUpdatedDeletedAtEntity}
+ * Data transfer object (DTO) dedicated to {@link AbstractOccCreatedUpdatedDeletedAtEntity} <br>
+ * <strong>To hide the <code>deletedAt</code> field use {@link AbstractOccCreatedUpdatedAtEntityDTO}</strong>
  * 
  * @author coodoo GmbH (coodoo.io)
  */

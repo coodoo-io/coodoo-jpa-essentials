@@ -13,11 +13,17 @@ import javax.persistence.PreUpdate;
 
 import io.coodoo.framework.jpa.boundary.IdAnnotated;
 import io.coodoo.framework.jpa.boundary.RevisionUser;
+import io.coodoo.framework.jpa.boundary.dto.AbstractIdCreatedUpdatedAtByEntityDTO;
+import io.coodoo.framework.jpa.boundary.dto.AbstractIdCreatedUpdatedDeletedAtByEntityDTO;
 import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
 
 /**
  * This {@link MappedSuperclass} is {@link Serializable}, attached to the {@link JpaEssentialsEntityListener} and provides the fields in this table:<br>
  * <br>
+ * You can use {@link AbstractIdCreatedUpdatedAtByEntityDTO} instead of {@link AbstractIdCreatedUpdatedDeletedAtByEntityDTO} to hide the {@link #deletedAt}
+ * field. <br>
+ * <br>
+ * 
  * 
  * <table border="1" summary="Fields">
  * <tbody>

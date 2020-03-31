@@ -5,9 +5,9 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
 
 import io.coodoo.framework.jpa.boundary.DeletedAt;
+import io.coodoo.framework.jpa.control.JpaEssentialsConfig;
 import io.coodoo.framework.jpa.entity.AbstractIdCreatedUpdatedDeletedAtEntity;
 
 /**
@@ -58,9 +58,6 @@ public abstract class RevisionDatesDmEntity extends RevisionDatesEntity implemen
     @Column(name = "deleted_at")
     protected LocalDateTime deletedAt;
 
-    @Transient
-    private boolean markedAsDeleted = false;
-
     public boolean isDeleted() {
         return deletedAt != null;
     }
@@ -81,7 +78,7 @@ public abstract class RevisionDatesDmEntity extends RevisionDatesEntity implemen
      */
     @Override
     public void markAsDeleted() {
-        markedAsDeleted = true;
+        this.deletedAt = JpaEssentialsConfig.now();
     }
 
     /**
@@ -89,8 +86,8 @@ public abstract class RevisionDatesDmEntity extends RevisionDatesEntity implemen
      *         You can check {@link #deletedAt} for when it was marked as deleted and {@link #deletedBy} for who did it.
      */
     @Override
-    public boolean isMarkedAsDeleted() {
-        return markedAsDeleted || deletedAt != null;
+    public boolean markedAsDeleted() {
+        return deletedAt != null;
     }
 
     @Override

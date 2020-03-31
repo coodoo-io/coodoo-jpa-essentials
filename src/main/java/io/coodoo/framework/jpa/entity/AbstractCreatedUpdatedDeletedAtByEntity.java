@@ -8,15 +8,20 @@ import javax.persistence.EntityManager;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-import javax.persistence.Transient;
 
 import io.coodoo.framework.jpa.boundary.DeletedAt;
 import io.coodoo.framework.jpa.boundary.DeletedBy;
 import io.coodoo.framework.jpa.boundary.RevisionUser;
+import io.coodoo.framework.jpa.boundary.dto.AbstractCreatedUpdatedAtByEntityDTO;
+import io.coodoo.framework.jpa.boundary.dto.AbstractCreatedUpdatedDeletedAtByEntityDTO;
+import io.coodoo.framework.jpa.control.JpaEssentialsConfig;
 import io.coodoo.framework.jpa.control.JpaEssentialsEntityListener;
 
 /**
  * This {@link MappedSuperclass} is {@link Serializable}, attached to the {@link JpaEssentialsEntityListener} and provides the fields in this table:<br>
+ * <br>
+ * You can use {@link AbstractCreatedUpdatedAtByEntityDTO} instead of {@link AbstractCreatedUpdatedDeletedAtByEntityDTO} to hide the {@link #deletedAt} field.
+ * <br>
  * <br>
  * 
  * <table border="1" summary="Fields">
@@ -86,9 +91,6 @@ public abstract class AbstractCreatedUpdatedDeletedAtByEntity extends AbstractCr
     @Column(name = "deleted_by")
     protected Long deletedBy;
 
-    @Transient
-    private boolean markedAsDeleted = false;
-
     @Override
     public LocalDateTime getDeletedAt() {
         return deletedAt;
@@ -117,7 +119,7 @@ public abstract class AbstractCreatedUpdatedDeletedAtByEntity extends AbstractCr
      */
     @Override
     public void markAsDeleted() {
-        markedAsDeleted = true;
+        this.deletedAt = JpaEssentialsConfig.now();
     }
 
     /**
@@ -125,8 +127,8 @@ public abstract class AbstractCreatedUpdatedDeletedAtByEntity extends AbstractCr
      *         You can check {@link #deletedAt} for when it was marked as deleted and {@link #deletedBy} for who did it.
      */
     @Override
-    public boolean isMarkedAsDeleted() {
-        return markedAsDeleted || deletedAt != null;
+    public boolean markedAsDeleted() {
+        return deletedAt != null;
     }
 
     @Override
@@ -144,8 +146,6 @@ public abstract class AbstractCreatedUpdatedDeletedAtByEntity extends AbstractCr
         builder.append(deletedAt);
         builder.append(", deletedBy=");
         builder.append(deletedBy);
-        builder.append(", markedAsDeleted=");
-        builder.append(markedAsDeleted);
         builder.append("]");
         return builder.toString();
     }

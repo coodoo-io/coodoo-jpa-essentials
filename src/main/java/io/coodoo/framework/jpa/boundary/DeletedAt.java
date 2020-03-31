@@ -29,6 +29,6 @@ public interface DeletedAt {
      * @return <code>true</code> if this entity pretends to be deleted. If <code>false</code> you can doom it by calling {@link #markAsDeleted()}. <br>
      *         You can check {@link #deletedAt} for when it was marked as deleted.
      */
-    public boolean isMarkedAsDeleted();
+    public boolean markedAsDeleted();
 
 }
