@@ -3,7 +3,13 @@ package io.coodoo.framework.jpa.boundary.entity;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
+import javax.persistence.EntityManager;
 import javax.persistence.MappedSuperclass;
+
+import io.coodoo.framework.jpa.boundary.DeletedAt;
+import io.coodoo.framework.jpa.boundary.DeletedBy;
+import io.coodoo.framework.jpa.control.JpaEssentialsConfig;
+import io.coodoo.framework.jpa.entity.AbstractIdCreatedUpdatedDeletedAtByEntity;
 
 /**
  * Base entity providing identification and automatically sets creation/update/deletion timestamps and user IDs
@@ -55,10 +61,12 @@ import javax.persistence.MappedSuperclass;
  * </table>
  * 
  * @author coodoo GmbH (coodoo.io)
+ * @deprecated use {@link AbstractIdCreatedUpdatedDeletedAtByEntity}
  */
+@Deprecated
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class RevisionDmEntity extends RevisionEntity {
+public abstract class RevisionDmEntity extends RevisionEntity implements DeletedAt, DeletedBy {
 
     @Column(name = "deleted_at")
     protected LocalDateTime deletedAt;
@@ -84,6 +92,26 @@ public abstract class RevisionDmEntity extends RevisionEntity {
 
     public void setDeletedBy(Long deletedBy) {
         this.deletedBy = deletedBy;
+    }
+
+    /**
+     * To just mark an entity as deleted, call this method instead of {@link EntityManager#remove(Object)}. The fields {@link #deletedAt} and {@link #deletedBy}
+     * will be set to mark the deletion. <br>
+     * On the other hand you have to provide your queries with something like '<code>deleted_at IS NULL</code>' to avoid 'marked as deleted' entries! for those
+     * fields if <code>null</code>.
+     */
+    @Override
+    public void markAsDeleted() {
+        this.deletedAt = JpaEssentialsConfig.now();
+    }
+
+    /**
+     * @return <code>true</code> if this entity pretends to be deleted. If <code>false</code> you can doom it by calling {@link #markAsDeleted()}. <br>
+     *         You can check {@link #deletedAt} for when it was marked as deleted and {@link #deletedBy} for who did it.
+     */
+    @Override
+    public boolean markedAsDeleted() {
+        return deletedAt != null;
     }
 
     @Override

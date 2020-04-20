@@ -8,6 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import io.coodoo.framework.jpa.boundary.IdAnnotated;
+import io.coodoo.framework.jpa.entity.AbstractIdEntity;
+
 /**
  * Base identification entity <br>
  * <br>
@@ -32,10 +35,12 @@ import javax.persistence.MappedSuperclass;
  * </table>
  * 
  * @author coodoo GmbH (coodoo.io)
+ * @deprecated use {@link AbstractIdEntity}
  */
+@Deprecated
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class BaseEntity implements Serializable {
+public abstract class BaseEntity implements IdAnnotated, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
