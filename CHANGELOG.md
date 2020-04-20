@@ -13,7 +13,7 @@
 ### Features
 
  * There is no EJB (`javax.ejb.*`) anymore!
- * Changed the package structure to a more BCEish pattern. The old package structure and classes remain but are marked as deprecated and the future is uncertain for them. All new entities come with a matching class.
+ * Changed the package structure to a more BCEish pattern. The old package structure and classes remain but are marked as deprecated and the future is uncertain for them. All new entities come with a matching DTO class.
 
 | Entity                                        | ID       | OCC      | Creat. Date | Creat. User | Upd. Date | Upd. User | Del. Date | Del. User |
 |-----------------------------------------------|:--------:|:--------:|:-----------:|:-----------:|:---------:|:---------:|:---------:|:---------:|
